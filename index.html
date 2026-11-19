@@ -1,0 +1,1352 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>महावितरण उपकेंद्र व्यवस्थापन | 33/11 kV सरतोडी उपकेंद्र (284619)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Noto+Sans+Devanagari:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f1f5f9;
+      --surface: #ffffff;
+      --subtle: #f8fafc;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #cbd5e1;
+      --border-soft: #e2e8f0;
+      --primary: #1d4ed8;
+      --primary-dark: #1e3a8a;
+      --cyan: #0284c7;
+      --green: #059669;
+      --amber: #d97706;
+      --red: #dc2626;
+      --shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.08);
+    }
+    body.dark {
+      --bg: #090e1a;
+      --surface: #111827;
+      --subtle: #1e293b;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --border: #334155;
+      --border-soft: #273549;
+      --primary: #38bdf8;
+      --primary-dark: #1e3a8a;
+      --cyan: #38bdf8;
+      --green: #34d399;
+      --amber: #fbbf24;
+      --red: #f87171;
+      --shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.5);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', 'Noto Sans Devanagari', system-ui, sans-serif; }
+    body { background: var(--bg); color: var(--text); line-height: 1.45; transition: background 0.2s, color 0.2s; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 14px; }
+    header.topbar {
+      position: sticky; top: 0; z-index: 40;
+      background: var(--surface); border-bottom: 1px solid var(--border-soft);
+      box-shadow: var(--shadow); padding: 10px 0;
+    }
+    .row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .between { justify-content: space-between; }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 14px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
+    .card {
+      background: var(--surface); border: 1px solid var(--border-soft);
+      border-radius: 16px; padding: 16px; box-shadow: var(--shadow);
+    }
+    .hero {
+      background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 55%, #0284c7 100%);
+      color: #fff; border-radius: 20px; padding: 20px;
+      box-shadow: 0 10px 25px -5px rgba(29, 78, 216, 0.35);
+    }
+    .logo {
+      width: 42px; height: 42px; border-radius: 12px;
+      background: linear-gradient(135deg, #1d4ed8, #0284c7);
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      font-size: 20px; font-weight: 800; flex-shrink: 0;
+    }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      border-radius: 10px; padding: 8px 14px; font-size: 13px; font-weight: 700;
+      border: 1px solid var(--border); background: var(--subtle); color: var(--text);
+      cursor: pointer; transition: all 0.15s; min-height: 38px;
+    }
+    .btn:hover { border-color: var(--primary); }
+    .btn-primary { background: #1d4ed8; color: #fff; border-color: #1d4ed8; }
+    .btn-primary:hover { background: #1e40af; }
+    .btn-green { background: #059669; color: #fff; border-color: #059669; }
+    .btn-amber { background: #d97706; color: #fff; border-color: #d97706; }
+    .btn-red { background: #dc2626; color: #fff; border-color: #dc2626; }
+    .btn-sm { padding: 5px 10px; font-size: 12px; min-height: 32px; }
+    .chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 700;
+      border: 1px solid transparent;
+    }
+    .chip-green { background: rgba(5,150,105,0.15); color: var(--green); border-color: rgba(5,150,105,0.3); }
+    .chip-amber { background: rgba(217,119,6,0.15); color: var(--amber); border-color: rgba(217,119,6,0.3); }
+    .chip-red { background: rgba(220,38,38,0.15); color: var(--red); border-color: rgba(220,38,38,0.3); }
+    .chip-blue { background: rgba(29,78,216,0.14); color: var(--primary); border-color: rgba(29,78,216,0.28); }
+    .input, select, textarea {
+      width: 100%; background: var(--subtle); color: var(--text);
+      border: 1px solid var(--border); border-radius: 10px; padding: 8px 11px;
+      font-size: 13px; outline: none;
+    }
+    .input:focus, select:focus, textarea:focus { border-color: var(--primary); }
+    label.fl { display: block; font-size: 11.5px; font-weight: 700; color: var(--muted); margin-bottom: 4px; }
+    .module-tile {
+      background: var(--surface); border: 1px solid var(--border-soft); border-radius: 16px;
+      padding: 16px; text-align: left; cursor: pointer; display: flex; flex-direction: column;
+      gap: 8px; box-shadow: var(--shadow); transition: transform 0.15s, border-color 0.15s;
+      color: var(--text); width: 100%;
+    }
+    .module-tile:hover { transform: translateY(-2px); border-color: var(--primary); }
+    .table-wrap { overflow-x: auto; border: 1px solid var(--border-soft); border-radius: 12px; }
+    table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+    th, td { padding: 8px 10px; border-bottom: 1px solid var(--border-soft); text-align: left; }
+    th { background: var(--subtle); font-weight: 800; color: var(--muted); white-space: nowrap; }
+    .num { text-align: right; font-family: 'JetBrains Mono', monospace; }
+    .tabs { display: flex; gap: 6px; border-bottom: 1px solid var(--border-soft); padding-bottom: 8px; flex-wrap: wrap; }
+    .tab {
+      padding: 7px 14px; border-radius: 10px; border: 1px solid var(--border-soft);
+      background: var(--subtle); color: var(--text); font-weight: 700; font-size: 13px; cursor: pointer;
+    }
+    .tab.active { background: #1d4ed8; color: #fff; border-color: #1d4ed8; }
+    .modal-backdrop {
+      position: fixed; inset: 0; background: rgba(15,23,42,0.65); z-index: 80;
+      display: flex; align-items: center; justify-content: center; padding: 16px;
+    }
+    .modal-box {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 18px;
+      max-width: 640px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 20px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+    }
+    .toast {
+      position: fixed; bottom: 18px; right: 18px; z-index: 95;
+      background: #0f172a; color: #fff; padding: 11px 16px; border-radius: 12px;
+      font-size: 13px; font-weight: 700; box-shadow: 0 10px 28px rgba(0,0,0,0.35);
+    }
+    .sld-box {
+      background: #0f172a; border-radius: 14px; padding: 14px; overflow-x: auto;
+      border: 1px solid #334155;
+    }
+    .muted { color: var(--muted); }
+    .small { font-size: 12px; }
+    .mt-2 { margin-top: 8px; } .mt-3 { margin-top: 12px; } .mt-4 { margin-top: 16px; }
+    .mb-2 { margin-bottom: 8px; } .mb-3 { margin-bottom: 12px; } .mb-4 { margin-bottom: 16px; }
+    @media print {
+      header.topbar, .no-print { display: none !important; }
+      body { background: #fff !important; color: #000 !important; }
+      .card { box-shadow: none !important; border: 1px solid #000 !important; }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- React 18 + Babel Standalone (Zero Build Step for GitHub Pages) -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Firebase v10 Modular SDK Bridge (Firestore Real-Time Sync + Google/Email Auth) -->
+  <script type="module">
+    import { initializeApp, getApps, deleteApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    window.__FB_SDK__ = {
+      initializeApp, getApps, deleteApp,
+      getFirestore, doc, setDoc, onSnapshot,
+      getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, signOut, onAuthStateChanged
+    };
+    window.dispatchEvent(new Event("fb-sdk-ready"));
+  </script>
+
+  <script type="text/babel">
+    const { useState, useEffect, useMemo, useRef } = React;
+
+    // ==================== MASTER DATA: 33/11 kV SARTODI SUBSTATION (284619) ====================
+    const MONTHS = ["JANUARY","FEBRUARY","MARCH","APRIL","MAY","JUNE","JULY","AUGUST","SEPTEMBER","OCTOBER","NOVEMBER","DECEMBER"];
+    const FEEDERS = [
+      "33 KV INCOMMER","POWER T/F NO.1","POWER T/F NO. 2","TOTAL H.V. LOAD",
+      "11 K.V. SAPHALA FEEDER","11 K.V. DFCC RAILWAY FEEDER","11 K.V. PARGAON FEEDER","11 K.V. NAVGHAR FEEDER"
+    ];
+    const TRIP_FEEDERS = [
+      "33 KV INCOMMER","POWER T/F NO.1","POWER T/F NO. 2",
+      "11 K.V. INCOMMER L.V. NO. 1","11 K.V. INCOMMER L.V. NO. 2",
+      "11 K.V. SAPHALA FEEDER (205)","11 K.V. DFCC RAILWAY FEEDER (204)",
+      "11 K.V. NAVGHAR FEEDER (203)","11 K.V. PARGAON FEEDER (201)"
+    ];
+    const TRIP_TYPES = [
+      "TP - Tripping (फॉल्ट ट्रिपिंग)","HT - Hand Trip (हॅण्ड ट्रिप)","SD - Shutdown / LC (शटडाउन)",
+      "BD - Breakdown (ब्रेकडाउन)","LS - Load Shedding (लोडशेडिंग)","PL - Plan Load Shedding (नियोजित लोडशेडिंग)"
+    ];
+    const ENERGY_METERS = [
+      { label: "33 KV INCOMMER (M32450021966)", cat: "33kV_IN", mf: 600 },
+      { label: "T/F NO. 1 H.V. (X1095238)", cat: "TF_HV", mf: 900 },
+      { label: "T/F NO. 2 H.V. (X1095384)", cat: "TF_HV", mf: 600 },
+      { label: "T/F NO. 1 L.V. (XD596070)", cat: "11kV_LV", mf: 80 },
+      { label: "T/F NO. 2 L.V. (X0400243)", cat: "11kV_LV", mf: 60 },
+      { label: "11 KV SAPHALA FDR 205 (M32450003003)", cat: "11kV_OUT", mf: 40 },
+      { label: "11 KV DFCC RAILWAY FDR 204 (M32450003452)", cat: "11kV_OUT", mf: 40 },
+      { label: "11 KV NAVGHAR FDR 203 (M32450003001)", cat: "11kV_OUT", mf: 40 },
+      { label: "11 KV PARGAON FDR 201 (M32450003002)", cat: "11kV_OUT", mf: 40 }
+    ];
+    const DAILY_LOSS_METERS = [
+      { id: "hv1", name: "H.V. SIDE POWER T/F NO. 1", shortName: "H.V. T/F-1", mf: 900 },
+      { id: "lv1", name: "L.V. SIDE POWER T/F NO. 1", shortName: "L.V. T/F-1", mf: 80 },
+      { id: "saphala", name: "11 K.V. SAPHALA FDR", shortName: "SAPHALA", mf: 40 },
+      { id: "dfcc", name: "11 K.V. DFCC RAILWAY FDR", shortName: "DFCC", mf: 40 },
+      { id: "hv2", name: "H.V. SIDE POWER T/F NO. 2", shortName: "H.V. T/F-2", mf: 600 },
+      { id: "lv2", name: "L.V. SIDE POWER T/F NO. 2", shortName: "L.V. T/F-2", mf: 60 },
+      { id: "pargaon", name: "11 K.V. PARGAON FDR", shortName: "PARGAON", mf: 40 },
+      { id: "navghar", name: "11 K.V. NAVGHAR FDR", shortName: "NAVGHAR", mf: 40 },
+      { id: "inc", name: "INCOMMER METER (33 kV)", shortName: "33kV INC", mf: 600 },
+      { id: "sst", name: "SUBSTATION T/F", shortName: "S/S T/F", mf: 10 }
+    ];
+    const MINMAX_ITEMS = [
+      { id: "inc33", name: "33 K.V. INCOMMER", unit: "A" },
+      { id: "tf1", name: "POWER T/F NO. 1", unit: "A" },
+      { id: "tf2", name: "POWER T/F NO. 2", unit: "A" },
+      { id: "hvtot", name: "TOTAL H.V. LOAD", unit: "A" },
+      { id: "lv1", name: "INCOMMER L.V. NO. 1", unit: "A" },
+      { id: "lv2", name: "INCOMMER L.V. NO. 2", unit: "A" },
+      { id: "saphala", name: "11 K.V. SAPHALA FEEDER", unit: "A" },
+      { id: "dfcc", name: "11 K.V. DFCC RAILWAY FEEDER", unit: "A" },
+      { id: "pargaon", name: "11 K.V. PARGAON FEEDER", unit: "A" },
+      { id: "navghar", name: "11 K.V. NAVGHAR FEEDER", unit: "A" },
+      { id: "volt", name: "11 K.V. VOLTAGE", unit: "kV" },
+      { id: "sstot", name: "TOTAL S/S LOAD", unit: "A" }
+    ];
+    const FAULT_EQUIPS = [
+      "Power T/F No. 1","Power T/F No. 2","33 kV CT","33 kV PT","33 kV HV Breaker T/F-1","33 kV HV Breaker T/F-2",
+      "33 kV Isolator / LA","11 kV VCB - Incomer LV-1","11 kV VCB - Incomer LV-2",
+      "11 kV VCB - 205 Saphala","11 kV VCB - 204 DFCC Railway","11 kV VCB - 203 Navghar","11 kV VCB - 201 Pargaon",
+      "11 kV CT / PT","Protection Relay","Energy Meter (SECURE)","110V DC Battery Bank","Battery Charger","Substation T/F (LT)","इतर"
+    ];
+    const FAULT_STATUSES = ["बिघाड (Open)","दुरुस्ती सुरू","दुरुस्त झाले","बदलले (Replaced)"];
+
+    // 33 Months Substation Loss History (Jan 2024 – Sep 2026)
+    const MASTER_LOSS_HISTORY = [
+      [2024,0,1598400,1582788,15612,0.977],[2024,1,1555800,1542360,13440,0.864],[2024,2,1879200,1867252,11948,0.636],
+      [2024,3,2251200,2248268,2932,0.13],[2024,4,2579400,2580080,-680,-0.026],[2024,5,2263800,2248560,15240,0.673],
+      [2024,6,1927200,1911044,16156,0.838],[2024,7,1934400,1936468,-2068,-0.107],[2024,8,1878600,1883289,-4689,-0.25],
+      [2024,9,2097000,2098739,-1739,-0.083],[2024,10,1837800,1834480,3320,0.181],[2024,11,1737000,1733852,3148,0.181],
+      [2025,0,1735800,1751769,-15969,-0.92],[2025,1,1674600,1702860,-28260,-1.688],[2025,2,2133000,2157899,-24899,-1.167],
+      [2025,3,2310600,2347251,-36651,-1.586],[2025,4,2155800,2191509,-35709,-1.656],[2025,5,2029200,2019881,9319,0.459],
+      [2025,6,2011200,1991219,19981,0.993],[2025,7,1905600,1885359,20241,1.062],[2025,8,1756800,1740804,15996,0.911],
+      [2025,9,1976400,1953642,22758,1.151],[2025,10,1743600,1729146,14454,0.829],[2025,11,1773000,1715627,57373,3.236],
+      [2026,0,1865400,1841398,24002,1.287],[2026,1,1851600,1830920,20680,1.117],[2026,2,2326200,2304400,21800,0.937],
+      [2026,3,2410800,2387440,23360,0.969],[2026,4,2747400,2722400,25000,0.91],[2026,5,2671800,2647720,24080,0.901],
+      [2026,6,2053800,2033600,20200,0.984],[2026,7,2275200,2249320,25880,1.137],[2026,8,2314800,2296400,18400,0.795]
+    ].map(([year,monthIdx,incomerKwh,outgoingKwh,diffKwh,lossPct]) => ({ year, monthIdx, month: MONTHS[monthIdx], incomerKwh, outgoingKwh, diffKwh, lossPct }));
+
+    // 34 Months Monthly Summary [y,m,f,tp,ht,sd,bd,ls,tot,dur,mxL,mnL,mxV,mnV,pdf]
+    const RAW_SUMMARY = [
+      [2024,0,0,3,1,2,4,0,10,829,219,59,33.7,30.5,"1dI5rxU1_Gn7uUBKyAh8XEshcqiYMRgBm"],[2024,0,4,8,8,2,4,0,22,891,128,35,11.7,10.4],[2024,0,5,5,1,2,4,0,12,841,0,0,0,0],[2024,0,6,12,2,4,4,0,22,888,47,15,0,0],[2024,0,7,9,5,2,4,0,20,919,55,10,0,0],
+      [2024,1,0,5,0,3,2,0,10,1072,233,96,33.6,30.6,"1axamdNvWYGZ96KibRmoPzhv9eYCTgQxG"],[2024,1,4,15,4,3,2,0,24,1183,132,60,11.6,10.4],[2024,1,5,6,5,3,2,0,16,1114,0,0,0,0],[2024,1,6,18,3,3,2,0,26,1170,64,17,0,0],[2024,1,7,15,6,3,2,0,26,1159,56,4,0,0],
+      [2024,2,0,3,0,0,1,3,7,516,219,60,33.5,30.3,"1PL-EGXQ7Xzp7-Doa5AXo7XJBcehlfIbl"],[2024,2,4,18,2,1,1,3,25,762,136,60,11.5,10.3],[2024,2,5,5,3,0,1,3,12,576,0,0,0,0],[2024,2,6,22,4,0,2,3,31,749,56,18,0,0],[2024,2,7,10,7,1,1,3,22,630,62,4,0,0],
+      [2024,3,0,6,0,2,0,6,14,971,270,75,32.9,30.2,"1V3rBD2I0zP506N6T8EpqELiLVM8jkHCm"],[2024,3,4,21,11,3,1,6,42,1325,159,17,11.4,10.1],[2024,3,5,7,6,3,0,6,22,1055,0,0,0,0],[2024,3,6,21,10,8,0,6,45,2767,83,26,0,0],[2024,3,7,21,8,5,2,6,42,1465,66,3,0,0],
+      [2024,4,0,4,0,3,0,5,12,918,293,47,33.2,30.2,"1heLaXaPv84sFSvVftGOY93TzUz8pndpe"],[2024,4,4,13,5,5,0,5,28,1248,171,79,11.3,10.2],[2024,4,5,4,7,3,0,9,23,949,0,0,0,0],[2024,4,6,31,12,6,1,5,55,1884,83,20,0,0],[2024,4,7,10,13,4,1,5,33,1323,76,6,0,0],
+      [2024,5,0,10,0,2,8,4,24,1491,279,113,33.6,30.3,"1z-YIfJNSBh4gRZCaLJa6tqRJ4FyJUyvK"],[2024,5,4,24,14,5,9,4,56,1765,160,72,11.4,10.2],[2024,5,5,15,0,4,9,4,32,1709,0,0,0,0],[2024,5,6,71,11,3,11,4,100,2228,88,20,0,0],[2024,5,7,64,10,4,11,4,93,2144,63,5,0,0],
+      [2024,6,0,14,0,0,3,0,17,505,206,47,33.4,31.0,"1dCNGDvnsNqGgFt3uWRTWEPwVWR-FCOnO"],[2024,6,4,33,15,6,14,0,68,1433,131,23,11.6,10.3],[2024,6,5,22,0,2,3,0,27,811,0,0,0,0],[2024,6,6,77,16,2,18,0,113,1733,61,13,0,0],[2024,6,7,85,14,3,6,0,108,1469,36,3,0,0],
+      [2024,7,0,15,1,1,7,0,24,1361,226,36,33.5,31.0,"1n-Nj5xj8M5upILr2tVxbSLF980ScmJt9"],[2024,7,4,36,12,2,8,0,58,1791,131,61,11.6,10.4],[2024,7,5,29,1,3,7,0,40,1754,0,0,0,0],[2024,7,6,72,10,1,11,0,94,1858,65,18,0,0],[2024,7,7,58,6,1,8,0,73,1664,36,7,0,0],
+      [2024,8,0,14,0,3,9,0,26,2011,237,60,33.5,30.8,"1grs4RnWkl_K_FHohszXw9-l40JHwc-ss"],[2024,8,4,27,8,3,10,0,48,2187,147,47,11.6,10.0],[2024,8,5,15,0,3,9,0,27,2013,0,0,0,0],[2024,8,6,48,7,4,14,0,73,2443,70,25,0,0],[2024,8,7,54,6,5,10,0,75,2496,37,8,0,0],
+      [2024,9,0,9,0,1,3,0,13,907,211,57,33.3,30.8,"1kHn7p5_MNZOJnKteRP7LdpZnYQf--NHd"],[2024,9,4,26,10,1,7,0,44,991,124,22,11.5,10.4],[2024,9,5,21,0,1,4,0,26,989,0,0,0,0],[2024,9,6,55,12,1,11,0,79,1547,66,16,0,0],[2024,9,7,44,7,1,5,0,57,1219,45,13,0,0],
+      [2024,10,0,9,0,2,1,0,12,311,213,81,33.5,31.0,"1zLtwI1Y8xrzdGFbcYEQUWc0w9jb1tmEm"],[2024,10,4,23,2,2,1,0,28,423,124,45,11.6,10.0],[2024,10,5,16,0,2,1,0,19,334,0,0,0,0],[2024,10,6,45,3,3,3,0,54,672,65,18,0,0],[2024,10,7,43,2,2,1,0,48,415,45,14,0,0],
+      [2024,11,0,6,0,2,1,0,9,1131,219,79,33.5,30.2,"1ePaGpmz8ytxO7jFEO62nfll5Gz7pOYT2"],[2024,11,4,13,2,1,1,0,26,1270,126,40,11.6,10.2],[2024,11,5,3,0,0,0,0,12,1140,0,0,0,0],[2024,11,6,34,8,1,1,0,53,1442,70,12,0,0],[2024,11,7,11,0,0,1,0,21,1217,44,11,0,0],
+      [2025,0,0,5,0,1,0,0,6,143,185,63,33.4,30.6,"1eAUtDwWqTSMmbcGE_y3A0mNuFsvVKBq7"],[2025,0,4,14,7,1,0,0,22,274,98,43,11.6,10.4],[2025,0,5,5,0,1,0,0,6,143,0,0,0,0],[2025,0,6,19,7,1,2,0,29,323,61,23,0,0],[2025,0,7,12,3,1,0,0,16,201,35,11,0,0],
+      [2025,1,0,4,0,0,2,0,6,331,220,89,33.4,30.5,"1kt7FjZZptGCr-HfsYrFr0g5jPYShjO1z"],[2025,1,4,15,4,1,2,0,22,474,119,45,11.5,10.3],[2025,1,5,5,0,0,2,0,7,336,0,0,0,0],[2025,1,6,45,7,0,4,0,56,692,70,15,0,0],[2025,1,7,15,5,0,3,0,23,441,41,8,0,0],
+      [2025,2,0,5,0,2,0,1,8,611,231,87,33.7,29.3,"1OL27lxTfO4WNm5T3PeobEjmX1Nym6vN_"],[2025,2,4,27,6,3,0,1,37,839,120,19,11.6,9.8],[2025,2,5,5,0,2,0,1,8,611,0,0,0,0],[2025,2,6,24,2,2,0,1,29,737,77,33,0,0],[2025,2,7,14,4,2,0,1,21,678,37,16,0,0],
+      [2025,3,0,5,0,2,1,1,9,1199,265,70,33.9,31.0,"1Y4_PV11zsYm7sHMe_D_9JCpkdEWzllqT"],[2025,3,4,13,6,2,2,1,24,1330,148,76,11.4,10.3],[2025,3,5,6,1,2,1,1,11,1210,0,0,0,0],[2025,3,6,30,5,2,4,6,47,1855,90,22,0,0],[2025,3,7,14,5,2,1,5,27,1658,40,15,0,0],
+      [2025,4,0,6,0,5,11,0,22,3366,261,24,33.1,31.3,"1Q7TO4im3Gxb7lx3StA9FcdrD9dwGWAeM"],[2025,4,4,26,5,7,17,0,55,4376,158,65,11.6,10.1],[2025,4,5,7,1,5,11,0,24,3389,0,0,0,0],[2025,4,6,85,7,6,20,0,118,5121,81,8,0,0],[2025,4,7,38,2,5,13,0,58,3791,36,6,0,0],
+      [2025,5,0,13,0,3,7,0,23,2365,233,59,34.0,31.5,"1rhQslUh7eteJ5wH7gKf9uCVMcSXIoCEL"],[2025,5,4,54,11,5,9,0,79,2856,168,67,11.7,10.5],[2025,5,5,15,0,5,7,0,27,2453,1,0,0,0],[2025,5,6,97,22,4,10,0,133,3250,71,14,0,0],[2025,5,7,65,3,3,14,0,85,2943,36,3,0,0],
+      [2025,6,0,10,0,5,4,0,19,893,215,60,33.8,31.4,"1xo9OVZsVBQg6awjgyNfzHSb5XykAJFfb"],[2025,6,4,25,7,8,10,0,50,1357,136,59,11.8,10.4],[2025,6,5,11,0,5,4,0,20,897,0,0,0,0],[2025,6,6,66,15,5,7,0,93,1381,60,21,0,0],[2025,6,7,60,13,6,6,0,85,1372,33,5,0,0],
+      [2025,7,0,4,0,3,1,0,8,596,221,27,34.0,31.1,"16Xu76gzVmKCnGSnhKXDEdVfM7F4gcjRC"],[2025,7,4,34,7,4,3,0,48,1250,131,60,11.6,10.5],[2025,7,5,6,0,3,1,0,10,614,0,0,0,0],[2025,7,6,97,21,4,4,0,126,1417,61,21,0,0],[2025,7,7,64,17,3,4,0,88,1217,30,2,0,0],
+      [2025,8,0,18,0,3,10,0,31,2064,208,31,33.7,31.4,"1t_TWBQslnc3VuXW1mHnTrG4tlzb7aKV0"],[2025,8,4,36,9,5,10,0,60,2637,127,61,11.7,10.7],[2025,8,5,20,1,3,10,0,34,2092,0,0,0,0],[2025,8,6,81,10,5,16,0,112,2953,54,20,0,0],[2025,8,7,51,20,6,11,0,88,3559,40,4,0,0],
+      [2025,9,0,13,0,4,1,0,18,665,243,61,33.7,31.0,"1IlBiSWvmtCOKudZBlHN5yRopHyA9eQxJ"],[2025,9,4,29,6,4,2,0,41,875,164,60,11.6,10.0],[2025,9,5,15,0,4,1,0,20,675,0,0,0,0],[2025,9,6,55,4,5,3,0,67,1084,61,20,0,0],[2025,9,7,67,7,8,8,0,90,2759,40,5,0,0],
+      [2025,10,0,19,0,2,5,0,26,715,218,87,34.1,31.5,"1ZyIKIC45nH3BHI2eV2QhZEhryw6JJTg4"],[2025,10,4,43,6,3,5,0,57,1017,130,48,11.7,10.6],[2025,10,5,21,0,2,5,0,28,725,0,0,0,0],[2025,10,6,44,8,4,8,0,64,1026,57,13,0,0],[2025,10,7,38,6,3,6,0,53,910,60,12,0,0],
+      [2025,11,0,3,0,1,2,0,6,684,229,45,34.1,31.7,"1gANrQUMJMGpIW1_vgfZmOPOWU8eOayuK"],[2025,11,4,15,4,3,5,0,27,1255,122,40,11.8,10.6],[2025,11,5,4,1,2,2,0,9,754,0,0,0,0],[2025,11,6,24,14,3,3,0,44,1118,72,8,0,0],[2025,11,7,11,6,3,2,0,22,911,62,10,0,0],
+      [2026,0,0,4,0,1,2,0,7,545,211,34,34.2,31.6,"1fqF28udIOgTA0CPdsLBlgUxzRQCktxuJ"],[2026,0,4,14,4,1,3,0,22,697,107,46,11.9,10.2],[2026,0,5,7,1,1,2,0,11,560,1,0,0,0],[2026,0,6,18,6,1,3,0,28,747,65,19,0,0],[2026,0,7,8,2,1,2,0,13,585,68,11,0,0],
+      [2026,1,0,5,1,0,0,0,6,43,218,60,33.9,31.2,"1myBdcWxDtTr4Hn62_t6PBCjj8bU-DV4i"],[2026,1,4,14,3,0,1,0,18,194,99,55,11.8,10.6],[2026,1,5,6,4,0,0,0,10,64,0,0,0,0],[2026,1,6,18,8,0,0,0,26,142,61,25,0,0],[2026,1,7,16,5,0,0,0,21,112,67,9,0,0],
+      [2026,2,0,1,0,1,1,0,3,508,240,59,33.7,31.0,"1G3c1QxSonOOdM8VX_PEURfcAx9FbV37l"],[2026,2,4,24,6,1,3,0,34,792,140,19,11.7,10.0],[2026,2,5,3,8,1,1,0,13,541,0,0,0,0],[2026,2,6,25,9,1,5,0,40,849,65,19,0,0],[2026,2,7,12,5,1,1,0,19,621,72,16,0,0],
+      [2026,3,0,2,0,3,1,0,6,966,262,89,33.7,31.2,"1VwrBZaDUnrAtvjFTnt63T40yDuGRORfI"],[2026,3,4,10,3,4,1,0,18,1396,139,68,11.6,10.3],[2026,3,5,2,1,5,1,0,9,1529,0,0,0,0],[2026,3,6,22,11,4,3,0,40,1575,70,24,0,0],[2026,3,7,10,7,4,1,0,22,1426,64,10,0,0],
+      [2026,4,0,7,0,2,1,0,10,387,283,71,33.7,31.5,"1-T2p90MO238AdP1Y1zywoIum7zbPs7g5"],[2026,4,4,25,4,5,3,0,37,1152,164,70,11.7,10.5],[2026,4,5,9,0,3,1,0,13,569,7,0,0,0],[2026,4,6,25,7,4,1,0,37,969,73,4,0,0],[2026,4,7,16,1,4,1,0,22,1034,66,7,0,0],
+      [2026,5,0,12,1,5,1,0,19,786,298,81,33.9,31.1,"1bqLYS2raYxjC_X1NCshMtglg8gC1v8lp"],[2026,5,4,27,6,6,1,0,40,1123,165,29,11.8,10.5],[2026,5,5,14,7,5,1,0,27,834,7,0,0,0],[2026,5,6,68,12,5,11,0,96,1592,72,3,0,0],[2026,5,7,30,11,6,2,0,49,1266,71,7,0,0],
+      [2026,6,0,6,0,5,9,0,20,1677,268,65,34.1,31.2,"1YBO6NTrzkZnxvivioRg5eZzD9PSmxM2d"],[2026,6,4,38,11,5,15,0,69,2459,147,58,11.9,10.7],[2026,6,5,6,17,5,9,0,37,1812,2,0,0,0],[2026,6,6,122,19,6,23,0,170,3344,61,2,0,0],[2026,6,7,44,34,5,15,0,98,2586,68,5,0,0],
+      [2026,7,0,7,0,1,1,0,9,461,248,85,34.0,31.5,"1mo-OKB_rRV52d9gppGIEeWnPskUnsTow"],[2026,7,4,21,4,3,1,0,29,591,157,42,11.7,10.5],[2026,7,5,7,10,1,1,0,19,492,2,0,0,0],[2026,7,6,70,13,2,7,0,92,950,63,4,0,0],[2026,7,7,25,12,4,1,0,42,904,67,4,0,0],
+      [2026,8,0,9,0,2,1,0,12,469,239,112,34.0,31.5,"1zJubHX6HQU2XWHMbwLn_53TkPws1Ymnu"],[2026,8,4,25,2,2,1,0,30,563,136,52,11.7,10.7],[2026,8,5,9,8,2,1,0,20,501,1,0,0,0],[2026,8,6,40,5,3,5,0,53,610,60,2,0,0],[2026,8,7,12,8,2,1,0,23,516,62,13,0,0],
+      [2026,9,0,8,0,0,0,0,8,74,240,59,33.8,31.0,"1AHjMo_VvADBqHxFau0f2ubgScpe-L1pT"],[2026,9,4,24,9,1,1,0,35,398,130,23,11.7,10.0],[2026,9,5,8,6,0,0,0,14,92,1,0,0,0],[2026,9,6,52,7,1,4,0,64,308,68,26,0,0],[2026,9,7,16,8,0,0,0,24,147,69,3,0,0]
+    ].map(([year,monthIdx,feederIdx,tp,ht,sd,bd,ls,totalTripping,durationMin,maxLoad,minLoad,maxVolt,minVolt,drivePdfId=""]) => ({
+      year, monthIdx, month: MONTHS[monthIdx], feederIdx, feeder: FEEDERS[feederIdx],
+      tp, ht, sd, bd, ls, totalTripping, durationMin, maxLoad, minLoad,
+      avgLoad: Math.round(((maxLoad + minLoad) / 2) * 10) / 10, maxVolt, minVolt, drivePdfId
+    }));
+
+    const DEFAULT_NAMEPLATES = [
+      { id:"tf_1", category:"transformers", bay:"Power T/F Bay-1 (Left)", name:"5 MVA Power Transformer No. 1", status:"In Service (ON)", make:"Crompton Greaves Ltd.", serialNo:"T-5MVA-284619-01", year:"2018", specs:{ spec:"5 MVA, 33/11 kV, %Z 7.15%, Dyn11, ONAN, Oil 3250 L | HV S/N X1095238 (MF 900) | LV S/N XD596070 (MF 80)" } },
+      { id:"tf_2", category:"transformers", bay:"Power T/F Bay-2 (Right)", name:"5 MVA Power Transformer No. 2", status:"In Service (ON)", make:"Bharat Bijlee Ltd.", serialNo:"BB-5MVA-284619-02", year:"2019", specs:{ spec:"5 MVA, 33/11 kV, %Z 7.18%, Dyn11, ONAN, Oil 3300 L | HV S/N X1095384 (MF 600) | LV S/N X0400243 (MF 60)" } },
+      { id:"tf_dtc", category:"transformers", bay:"11kV LV-1 Auxiliary", name:"63 KVA Station Transformer (DTC)", status:"In Service (ON)", make:"MSEDCL Approved", serialNo:"DTC-63-284619", year:"2018", specs:{ spec:"63 kVA, 11 kV/433 V, Dyn11, 11kV Isolator + D.O. Fuse Set" } },
+      { id:"ct_33main", category:"cts", bay:"33kV सफाळे मेन इनकमर", name:"33 kV Saphale Main Incomer C.T.", status:"In Service (ON)", make:"Pragati Electricals", serialNo:"CT33-INC-R-101", year:"2018", specs:{ ratio:"200/1 A (MF 600)", r:"CT33-INC-R-101", y:"CT33-INC-Y-102", b:"CT33-INC-B-103" } },
+      { id:"ct_tf1", category:"cts", bay:"33kV T/F-1 HV Bay", name:"T/F No. 1 HV Side C.T.", status:"In Service (ON)", make:"Pragati Electricals", serialNo:"CT33-TF1-R-201", year:"2018", specs:{ ratio:"300/1 A (MF 900)", r:"CT33-TF1-R-201", y:"CT33-TF1-Y-202", b:"CT33-TF1-B-203" } },
+      { id:"ct_tf2", category:"cts", bay:"33kV T/F-2 HV Bay", name:"T/F No. 2 HV Side C.T.", status:"In Service (ON)", make:"Pragati Electricals", serialNo:"CT33-TF2-R-301", year:"2019", specs:{ ratio:"200/1 A (MF 600)", r:"CT33-TF2-R-301", y:"CT33-TF2-Y-302", b:"CT33-TF2-B-303" } },
+      { id:"ct_lv1", category:"cts", bay:"11kV Incomer LV-1", name:"11 kV Incomer LV-1 C.T.", status:"In Service (ON)", make:"Kappa Electricals", serialNo:"CT11-LV1-R-401", year:"2018", specs:{ ratio:"400/5 A (MF 80)", r:"CT11-LV1-R-401", y:"CT11-LV1-Y-402", b:"CT11-LV1-B-403" } },
+      { id:"ct_lv2", category:"cts", bay:"11kV Incomer LV-2", name:"11 kV Incomer LV-2 C.T.", status:"In Service (ON)", make:"Kappa Electricals", serialNo:"CT11-LV2-R-501", year:"2019", specs:{ ratio:"300/5 A (MF 60)", r:"CT11-LV2-R-501", y:"CT11-LV2-Y-502", b:"CT11-LV2-B-503" } },
+      { id:"ct_205", category:"cts", bay:"Bay 205 (11kV सफाळा)", name:"11 kV सफाळा फिडर C.T.", status:"In Service (ON)", make:"Pragati Electricals", serialNo:"CT205-R-01", year:"2018", specs:{ ratio:"200/5 A (MF 40)", r:"CT205-R-01", y:"CT205-Y-02", b:"CT205-B-03" } },
+      { id:"ct_204", category:"cts", bay:"Bay 204 (11kV DFCCIL)", name:"11 kV DFCCIL Railway C.T.", status:"In Service (ON)", make:"Pragati Electricals", serialNo:"CT204-R-01", year:"2020", specs:{ ratio:"200/5 A (MF 40)", r:"CT204-R-01", y:"CT204-Y-02", b:"CT204-B-03" } },
+      { id:"ct_203", category:"cts", bay:"Bay 203 (11kV नवघर)", name:"11 kV नवघर फिडर C.T.", status:"In Service (ON)", make:"Pragati Electricals", serialNo:"CT203-R-01", year:"2018", specs:{ ratio:"200/5 A (MF 40)", r:"CT203-R-01", y:"CT203-Y-02", b:"CT203-B-03" } },
+      { id:"ct_201", category:"cts", bay:"Bay 201 (11kV पारगाव)", name:"11 kV पारगाव फिडर C.T.", status:"In Service (ON)", make:"Pragati Electricals", serialNo:"CT201-R-01", year:"2018", specs:{ ratio:"200/5 A (MF 40)", r:"CT201-R-01", y:"CT201-Y-02", b:"CT201-B-03" } },
+      { id:"pt_33main", category:"pts", bay:"33kV सफाळे मेन इनकमर", name:"33 kV Main Incomer P.T.", status:"In Service (ON)", make:"Pragati Electricals", serialNo:"PT33-INC-R-11", year:"2018", specs:{ ratio:"33 kV / 110 V", r:"PT33-INC-R-11", y:"PT33-INC-Y-12", b:"PT33-INC-B-13" } },
+      { id:"pt_33bus", category:"pts", bay:"33kV Main Bus (G.O.D.)", name:"33 kV Bus Common P.T.", status:"In Service (ON)", make:"Pragati Electricals", serialNo:"PT33-BUS-R-21", year:"2018", specs:{ ratio:"33 kV / 110 V", r:"PT33-BUS-R-21", y:"PT33-BUS-Y-22", b:"PT33-BUS-B-23" } },
+      { id:"pt_11bus1", category:"pts", bay:"11kV Bus Section-1", name:"11 kV Common P.T. Set-1", status:"In Service (ON)", make:"Kappa Electricals", serialNo:"PT11-S1-R-31", year:"2018", specs:{ ratio:"11 kV / 110 V", r:"PT11-S1-R-31", y:"PT11-S1-Y-32", b:"PT11-S1-B-33" } },
+      { id:"pt_11bus2", category:"pts", bay:"11kV Bus Section-2", name:"11 kV Common P.T. Set-2", status:"In Service (ON)", make:"Kappa Electricals", serialNo:"PT11-S2-R-41", year:"2019", specs:{ ratio:"11 kV / 110 V", r:"PT11-S2-R-41", y:"PT11-S2-Y-42", b:"PT11-S2-B-43" } },
+      { id:"vcb_33_1", category:"vcbs", bay:"33kV T/F-1 HV", name:"33 kV Outdoor VCB (T/F-1)", status:"In Service (ON)", make:"ABB India", serialNo:"ABB-33V-01", year:"2018", specs:{ spec:"36 kV, 1250 A, 25 kA / 3s, 110V DC" } },
+      { id:"vcb_33_2", category:"vcbs", bay:"33kV T/F-2 HV", name:"33 kV Outdoor VCB (T/F-2)", status:"In Service (ON)", make:"ABB India", serialNo:"ABB-33V-02", year:"2019", specs:{ spec:"36 kV, 1250 A, 25 kA / 3s, 110V DC" } },
+      { id:"vcb_lv1", category:"vcbs", bay:"11kV Incomer LV-1", name:"11 kV VCB Breaker (LV-1)", status:"In Service (ON)", make:"Siemens", serialNo:"SIE-11V-LV1", year:"2018", specs:{ spec:"12 kV, 1250 A, 25 kA / 3s, 110V DC" } },
+      { id:"vcb_lv2", category:"vcbs", bay:"11kV Incomer LV-2", name:"11 kV VCB Breaker (LV-2)", status:"In Service (ON)", make:"Siemens", serialNo:"SIE-11V-LV2", year:"2019", specs:{ spec:"12 kV, 1250 A, 25 kA / 3s, 110V DC" } },
+      { id:"vcb_205", category:"vcbs", bay:"Bay 205 (सफाळा)", name:"11 kV Feeder VCB (205)", status:"In Service (ON)", make:"Siemens", serialNo:"SIE-11V-205", year:"2018", specs:{ spec:"12 kV, 800 A, 25 kA" } },
+      { id:"vcb_204", category:"vcbs", bay:"Bay 204 (DFCCIL)", name:"11 kV Feeder VCB (204)", status:"In Service (ON)", make:"ABB India", serialNo:"ABB-11V-204", year:"2020", specs:{ spec:"12 kV, 800 A, 25 kA" } },
+      { id:"vcb_203", category:"vcbs", bay:"Bay 203 (नवघर)", name:"11 kV Feeder VCB (203)", status:"In Service (ON)", make:"Siemens", serialNo:"SIE-11V-203", year:"2018", specs:{ spec:"12 kV, 800 A, 25 kA" } },
+      { id:"vcb_201", category:"vcbs", bay:"Bay 201 (पारगाव)", name:"11 kV Feeder VCB (201)", status:"In Service (ON)", make:"Siemens", serialNo:"SIE-11V-201", year:"2018", specs:{ spec:"12 kV, 800 A, 25 kA" } },
+      { id:"m_33inc", category:"aux", bay:"33 KV INCOMMER", name:"SECURE ABT Meter — 33 KV INCOMMER", status:"In Service (ON)", make:"SECURE", serialNo:"M32450021966", year:"2020", specs:{ spec:"CT: 200/1 A | MF: 600 | PT: 33kV/110V" } },
+      { id:"m_tf1hv", category:"aux", bay:"T/F NO. 1 H.V.", name:"SECURE ABT Meter — T/F-1 HV", status:"In Service (ON)", make:"SECURE", serialNo:"X1095238", year:"2018", specs:{ spec:"CT: 300/1 A | MF: 900 | Relay: 30%" } },
+      { id:"m_tf2hv", category:"aux", bay:"T/F NO. 2 H.V.", name:"SECURE ABT Meter — T/F-2 HV", status:"In Service (ON)", make:"SECURE", serialNo:"X1095384", year:"2019", specs:{ spec:"CT: 200/1 A | MF: 600 | Relay: 44%" } },
+      { id:"m_tf1lv", category:"aux", bay:"T/F NO. 1 L.V.", name:"SECURE Meter — T/F-1 LV", status:"In Service (ON)", make:"SECURE", serialNo:"XD596070", year:"2018", specs:{ spec:"CT: 400/5 A | MF: 80 | Relay: 65%" } },
+      { id:"m_tf2lv", category:"aux", bay:"T/F NO. 2 L.V.", name:"SECURE Meter — T/F-2 LV", status:"In Service (ON)", make:"SECURE", serialNo:"X0400243", year:"2019", specs:{ spec:"CT: 300/5 A | MF: 60 | Relay: 84%" } },
+      { id:"m_205", category:"aux", bay:"Bay 205 (सफाळा)", name:"SECURE Meter — 11 KV SAPHALA", status:"In Service (ON)", make:"SECURE", serialNo:"M32450003003", year:"2020", specs:{ spec:"CT: 200/5 A | MF: 40 | Relay: 100%" } },
+      { id:"m_204", category:"aux", bay:"Bay 204 (DFCCIL)", name:"SECURE Meter — 11 KV DFCCIL", status:"In Service (ON)", make:"SECURE", serialNo:"M32450003452", year:"2020", specs:{ spec:"CT: 200/5 A | MF: 40 | Relay: 15%" } },
+      { id:"m_203", category:"aux", bay:"Bay 203 (नवघर)", name:"SECURE Meter — 11 KV NAVGHAR", status:"In Service (ON)", make:"SECURE", serialNo:"M32450003001", year:"2020", specs:{ spec:"CT: 200/5 A | MF: 40 | Relay: 45%" } },
+      { id:"m_201", category:"aux", bay:"Bay 201 (पारगाव)", name:"SECURE Meter — 11 KV PARGAON", status:"In Service (ON)", make:"SECURE", serialNo:"M32450003002", year:"2020", specs:{ spec:"CT: 200/5 A | MF: 40 | Relay: 60%" } },
+      { id:"aux_bat", category:"aux", bay:"Battery Room", name:"110V DC Battery Bank (55 Cells)", status:"In Service (ON)", make:"Exide / Amar Raja", serialNo:"EX-110V-100AH", year:"2021", specs:{ spec:"110V DC, 100Ah, Float-cum-Boost Charger" } },
+      { id:"aux_cap", category:"aux", bay:"11kV Bus L & R", name:"11 kV Capacitor Banks (2×600 kVAr)", status:"In Service (ON)", make:"Meher / Epcos", serialNo:"CAP-11KV-2X600", year:"2019", specs:{ spec:"Left LV-1 + Right LV-2 Capacitor Banks" } }
+    ];
+
+    const MODULES = [
+      { id:"sld", num:"१", icon:"🔌", title:"सिंगल लाईन डायग्राम (SLD)", desc:"33kV मेन व स्पेअर, 2×5 MVA T/F, 63 kVA DTC, कॅपॅसिटर व 4 बायपास G.O.D." },
+      { id:"analytics", num:"२", icon:"📊", title:"२०२४–२०२६ ॲनालिटिक्स व PDF", desc:"34 महिने फिडर कामगिरी, 33 महिने लॉस चार्ट व Drive PDF लिंक्स." },
+      { id:"equipment", num:"३", icon:"⚙️", title:"यंत्रसामग्री व R-Y-B नेमप्लेट", desc:"ट्रान्सफॉर्मर, C.T./P.T. (R-Y-B), VCB व SECURE मीटर्स मास्टर." },
+      { id:"tripping", num:"४", icon:"⚡", title:"दैनंदिन ट्रिपिंग / शटडाउन", desc:"TP, HT, SD, BD, LS, PL व कालावधी ऑटो-गणना." },
+      { id:"energy", num:"५", icon:"🔋", title:"दैनिक / मासिक एनर्जी व लॉसेस", desc:"ऑटो MF (600, 900, 80, 60, 40) नुसार युनिट्स व लॉस %." },
+      { id:"loads", num:"६", icon:"📈", title:"व्होल्टेज व लोड Min/Max", desc:"33kV व 11kV बस व्होल्टेज, T/F व फिडर लोड नोंद." },
+      { id:"handover", num:"७", icon:"🔄", title:"शिफ्ट चार्ज हँडओव्हर", desc:"शिफ्ट कार्यभार हस्तांतरण, चालू फिडर्स व प्रलंबित LC." },
+      { id:"battery", num:"८", icon:"🪫", title:"बॅटरी बँक तपासणी (110V)", desc:"55 Cells व्होल्टेज, Float/Boost चार्जर व Sp. Gravity." },
+      { id:"pdf_io", num:"९", icon:"📄", title:"आवक-जावक व मासिक A4 PDF", desc:"पत्रव्यवहार रजिस्टर व मासिक एकत्रित A4 प्रिंट/PDF." },
+      { id:"daily_loss", num:"१०", icon:"🧮", title:"दैनिक लॉसेस रजिस्टर (Loss Calc)", desc:"ऑटो Initial carryover, M.F. नुसार Consumption व 9 लॉस %." },
+      { id:"minmax", num:"११", icon:"📑", title:"Min-Max नोंद व मासिक PDF पॅक", desc:"रोजची Min-Max वेळेसह + MSEDCL Interruption व Loss PDF." },
+      { id:"faults", num:"१२", icon:"🛠️", title:"यंत्रसामग्री बिघाड / दुरुस्ती", desc:"बिघाड तारीख, कार्यवाही, जुना→नवीन S/N व स्थिती ट्रॅकिंग." }
+    ];
+
+    const STORE_KEY = "msedcl_sartodi_react_firebase_v1";
+    const FB_CFG_KEY = "msedcl_sartodi_firebase_cfg_v1";
+    const todayIso = () => new Date().toISOString().slice(0, 10);
+    const fmtNum = (n, d = 0) => n == null || isNaN(n) ? "—" : Number(n).toLocaleString("en-IN", { maximumFractionDigits: d, minimumFractionDigits: d });
+    const fmtDmy = (ymd) => { const p = (ymd || "").split("-"); return p.length === 3 ? `${p[2]}/${p[1]}/${p[0]}` : ymd; };
+    const calcDurMin = (a, b) => {
+      const p1 = (a || "").split(":"), p2 = (b || "").split(":");
+      if (p1.length < 2 || p2.length < 2) return 0;
+      let d = (+p2[0]*60 + +p2[1]) - (+p1[0]*60 + +p1[1]);
+      if (d < 0) d += 1440;
+      return isNaN(d) ? 0 : d;
+    };
+
+    function createDefaultSub(id = "sub_284619", name = "33/11 kV सरतोडी उपकेंद्र (Sartodi Substation)", code = "284619", division = "सफाळा शाखा, सफाळा उपविभाग, पालघर विभाग (MSEDCL)") {
+      return {
+        id, name, code, division,
+        switches: { goCouplerClosed: false, pt33GodClosed: true, capLeftOn: true, capRightOn: true, byp_205_206: false, byp_204_205: false, byp_202_203: false, byp_201_202: false },
+        lossMf: {}, trips: [], energy: [], loads: [], handovers: [], battery: [], io: [], faults: [],
+        dailyLosses: {}, minmax: {}, nameplates: DEFAULT_NAMEPLATES, customLoss: []
+      };
+    }
+
+    function loadInitialStore() {
+      try {
+        const raw = localStorage.getItem(STORE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && parsed.substations && Object.keys(parsed.substations).length) return parsed;
+        }
+      } catch {}
+      const def = createDefaultSub();
+      return { activeId: def.id, substations: { [def.id]: def } };
+    }
+
+    function calcDailyLoss(dateKey, allDays, mfOverrides) {
+      const sorted = Object.keys(allDays || {}).sort();
+      const cur = (allDays && allDays[dateKey]) || { finalReadings: {}, initialOverrides: {} };
+      const rows = DAILY_LOSS_METERS.map(m => {
+        const mf = (mfOverrides && mfOverrides[m.id]) ? Number(mfOverrides[m.id]) : m.mf;
+        const manInit = cur.initialOverrides && cur.initialOverrides[m.id] != null ? Number(cur.initialOverrides[m.id]) : null;
+        let prevFinal = null;
+        if (manInit == null) {
+          for (let i = sorted.length - 1; i >= 0; i--) {
+            const dk = sorted[i];
+            if (dk < dateKey && allDays[dk]?.finalReadings?.[m.id] != null) {
+              prevFinal = Number(allDays[dk].finalReadings[m.id]);
+              break;
+            }
+          }
+        }
+        const initialVal = manInit != null ? manInit : prevFinal;
+        const finalVal = cur.finalReadings && cur.finalReadings[m.id] != null ? Number(cur.finalReadings[m.id]) : null;
+        const diff = (initialVal != null && finalVal != null) ? (finalVal - initialVal) : null;
+        const cons = diff != null ? diff * mf : null;
+        return { meter: m, initialVal, manualInitial: manInit != null, finalVal, diff, mf, cons };
+      });
+      const c = {};
+      rows.forEach(r => c[r.meter.id] = r.cons);
+      const t1Out = (c.saphala != null && c.dfcc != null && c.sst != null) ? c.saphala + c.dfcc + c.sst : null;
+      const t2Out = (c.pargaon != null && c.navghar != null) ? c.pargaon + c.navghar : null;
+      const totalHv = (c.hv1 != null && c.hv2 != null) ? c.hv1 + c.hv2 : null;
+      const totalLv = (c.lv1 != null && c.lv2 != null) ? c.lv1 + c.lv2 : null;
+      const totalOg = (t1Out != null && t2Out != null) ? t1Out + t2Out : null;
+      const pair = (label, a, b) => ({ label, diff: (a != null && b != null) ? a - b : null, pct: (a != null && b != null && a !== 0) ? ((a - b) / a) * 100 : null });
+      const lossRows = [
+        pair("H.V. VS L.V. SIDE (T/F 1)", c.hv1, c.lv1),
+        pair("H.V. VS O/G FDR (T/F 1)", c.hv1, t1Out),
+        pair("L.V. VS O/G FDR (T/F 1)", c.lv1, t1Out),
+        pair("H.V. VS L.V. SIDE (T/F 2)", c.hv2, c.lv2),
+        pair("H.V. VS O/G FDR (T/F 2)", c.hv2, t2Out),
+        pair("L.V. VS O/G FDR (T/F 2)", c.lv2, t2Out),
+        pair("INC. VS H.V. SIDE", c.inc, totalHv),
+        pair("INC. VS O/G FDR", c.inc, totalOg),
+        pair("INC. VS L.V. SIDE", c.inc, totalLv)
+      ];
+      return { rows, c, t1Out, t2Out, totalHv, totalLv, totalOg, lossRows };
+    }
+
+    function printHtmlDoc(title, bodyHtml) {
+      const w = window.open("", "_blank");
+      if (!w) return alert("कृपया ब्राउझरमध्ये Pop-up allow करा.");
+      w.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>${title}</title>
+        <style>
+          body{font-family:sans-serif;margin:16px;color:#000;font-size:11px}
+          h2,h3{text-align:center;margin:4px 0}
+          table{border-collapse:collapse;width:100%;margin:10px 0}
+          th,td{border:1px solid #000;padding:4px 6px;text-align:center}
+          th{background:#e2e8f0} .l{text-align:left} .r{text-align:right}
+        </style></head><body>${bodyHtml}<script>window.onload=()=>window.print();<\/script></body></html>`);
+      w.document.close();
+    }
+
+    // ==================== MAIN REACT APP ====================
+    function App() {
+      const [store, setStore] = useState(loadInitialStore);
+      const [mod, setMod] = useState("home");
+      const [dark, setDark] = useState(() => localStorage.getItem("msedcl_dark") === "1");
+      const [editMode, setEditMode] = useState(true);
+      const [toast, setToast] = useState("");
+      const [eqModal, setEqModal] = useState(null);
+      const [fbModal, setFbModal] = useState(false);
+      const [addSubModal, setAddSubModal] = useState(false);
+
+      // Firebase live state
+      const [fbCfg, setFbCfg] = useState(() => {
+        try { return JSON.parse(localStorage.getItem(FB_CFG_KEY) || "null"); } catch { return null; }
+      });
+      const [fbUser, setFbUser] = useState(null);
+      const [syncStatus, setSyncStatus] = useState("लोकल मोड (Firebase जोडलेले नाही)");
+      const fbRef = useRef({ db: null, auth: null, unsubSnap: null, unsubAuth: null, suppressPush: false });
+
+      const notify = (msg) => { setToast(msg); setTimeout(() => setToast(""), 2600); };
+
+      useEffect(() => {
+        document.body.classList.toggle("dark", dark);
+        localStorage.setItem("msedcl_dark", dark ? "1" : "0");
+      }, [dark]);
+
+      // Connect Firebase if configured
+      useEffect(() => {
+        if (!fbCfg || !fbCfg.apiKey || !fbCfg.projectId) {
+          setSyncStatus("ऑफलाईन / लोकल स्टोरेज");
+          return;
+        }
+        const setup = async () => {
+          const sdk = window.__FB_SDK__;
+          if (!sdk) return;
+          try {
+            if (fbRef.current.unsubSnap) fbRef.current.unsubSnap();
+            if (fbRef.current.unsubAuth) fbRef.current.unsubAuth();
+            for (const a of sdk.getApps()) { await sdk.deleteApp(a); }
+            const app = sdk.initializeApp(fbCfg);
+            const db = sdk.getFirestore(app);
+            const auth = sdk.getAuth(app);
+            fbRef.current.db = db;
+            fbRef.current.auth = auth;
+            setSyncStatus("Firebase तयार — साइन-इन करा");
+            fbRef.current.unsubAuth = sdk.onAuthStateChanged(auth, (user) => {
+              setFbUser(user);
+              if (fbRef.current.unsubSnap) { fbRef.current.unsubSnap(); fbRef.current.unsubSnap = null; }
+              if (user) {
+                setSyncStatus("☁️ रिअल-टाइम सिंक चालू");
+                const userDoc = sdk.doc(db, "users", user.uid, "portal", "state");
+                fbRef.current.unsubSnap = sdk.onSnapshot(userDoc, (snap) => {
+                  if (snap.exists() && snap.data()?.storeJson) {
+                    try {
+                      const remote = JSON.parse(snap.data().storeJson);
+                      fbRef.current.suppressPush = true;
+                      setStore(remote);
+                      localStorage.setItem(STORE_KEY, JSON.stringify(remote));
+                      setTimeout(() => { fbRef.current.suppressPush = false; }, 300);
+                    } catch {}
+                  }
+                }, () => setSyncStatus("⚠️ Firestore Rules तपासा"));
+              } else {
+                setSyncStatus("Firebase तयार (साइन-इन करा)");
+              }
+            });
+          } catch (err) {
+            setSyncStatus("⚠️ Firebase Config त्रुटी");
+          }
+        };
+        if (window.__FB_SDK__) setup();
+        else window.addEventListener("fb-sdk-ready", setup, { once: true });
+      }, [fbCfg]);
+
+      const commitStore = (updater) => {
+        setStore(prev => {
+          const next = typeof updater === "function" ? updater(prev) : updater;
+          try { localStorage.setItem(STORE_KEY, JSON.stringify(next)); } catch {}
+          if (fbRef.current.db && fbUser && !fbRef.current.suppressPush) {
+            const sdk = window.__FB_SDK__;
+            sdk.setDoc(sdk.doc(fbRef.current.db, "users", fbUser.uid, "portal", "state"), {
+              storeJson: JSON.stringify(next),
+              updatedAt: new Date().toISOString()
+            }).catch(() => {});
+          }
+          return next;
+        });
+      };
+
+      const activeSub = store.substations[store.activeId] || Object.values(store.substations)[0];
+      const updateSub = (fn) => {
+        if (!editMode) return notify("सध्या सदस्य (Read-Only) मोड आहे. Edit सुरू करा.");
+        commitStore(prev => {
+          const cur = prev.substations[prev.activeId];
+          return { ...prev, substations: { ...prev.substations, [prev.activeId]: fn(cur) } };
+        });
+      };
+
+      const mergedLoss = useMemo(() => {
+        const m = new Map();
+        MASTER_LOSS_HISTORY.forEach(x => m.set(`${x.year}-${x.monthIdx}`, x));
+        (activeSub.customLoss || []).forEach(x => m.set(`${x.year}-${x.monthIdx}`, x));
+        return Array.from(m.values()).sort((a,b) => a.year - b.year || a.monthIdx - b.monthIdx);
+      }, [activeSub.customLoss]);
+
+      const exportJson = () => {
+        const blob = new Blob([JSON.stringify(store, null, 2)], { type: "application/json" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = `sartodi_substation_backup_${todayIso()}.json`;
+        a.click();
+        notify("JSON बॅकअप डाउनलोड झाला");
+      };
+
+      return (
+        <div>
+          <header className="topbar no-print">
+            <div className="container row between">
+              <div className="row" style={{ cursor: "pointer" }} onClick={() => setMod("home")}>
+                <div className="logo">⚡</div>
+                <div>
+                  <div style={{ fontWeight: 800, fontSize: 15 }}>{activeSub.name}</div>
+                  <div className="small muted">कोड: {activeSub.code} • {activeSub.division}</div>
+                </div>
+              </div>
+              <div className="row">
+                <select
+                  style={{ width: "auto", minWidth: 165 }}
+                  value={store.activeId}
+                  onChange={e => commitStore(p => ({ ...p, activeId: e.target.value }))}
+                >
+                  {Object.values(store.substations).map(s => (
+                    <option key={s.id} value={s.id}>{s.code} — {s.name.slice(0, 22)}</option>
+                  ))}
+                </select>
+                <button className="btn btn-sm" onClick={() => setAddSubModal(true)}>+ उपकेंद्र</button>
+                <button className={`btn btn-sm ${editMode ? "btn-amber" : ""}`} onClick={() => setEditMode(v => !v)}>
+                  {editMode ? "🛡️ ॲडमिन (Edit)" : "👁️ सदस्य व्यू"}
+                </button>
+                <button className="btn btn-sm btn-primary" onClick={() => setFbModal(true)}>
+                  ☁️ {fbUser ? fbUser.email?.split("@")[0] : "Firebase"}
+                </button>
+                <button className="btn btn-sm" onClick={exportJson}>💾 Backup</button>
+                <button className="btn btn-sm" onClick={() => setDark(d => !d)}>{dark ? "☀️" : "🌙"}</button>
+              </div>
+            </div>
+          </header>
+
+          <main className="container" style={{ paddingTop: 16, paddingBottom: 40 }}>
+            {mod === "home" && (
+              <HomeView
+                sub={activeSub} lossHistory={mergedLoss} syncStatus={syncStatus}
+                onOpen={setMod} onOpenFb={() => setFbModal(true)}
+              />
+            )}
+            {mod === "sld" && (
+              <SldView
+                sub={activeSub} editMode={editMode} onBack={() => setMod("home")}
+                onToggleSwitch={(k) => { updateSub(s => ({ ...s, switches: { ...s.switches, [k]: !s.switches[k] } })); notify("स्विच स्थिती अपडेट झाली"); }}
+                onOpenEq={(id) => { const found = (activeSub.nameplates || []).find(x => x.id === id); if (found) setEqModal(found); }}
+              />
+            )}
+            {mod === "analytics" && (
+              <AnalyticsView
+                lossHistory={mergedLoss} editMode={editMode} onBack={() => setMod("home")}
+                onAddLoss={(entry) => {
+                  updateSub(s => ({ ...s, customLoss: [...(s.customLoss || []).filter(x => !(x.year === entry.year && x.monthIdx === entry.monthIdx)), entry] }));
+                  notify("मासिक लॉस डेटा सेव्ह झाला");
+                }}
+              />
+            )}
+            {mod === "equipment" && (
+              <EquipmentView
+                items={activeSub.nameplates || DEFAULT_NAMEPLATES} editMode={editMode}
+                onBack={() => setMod("home")} onSelect={setEqModal}
+                onAdd={(doc) => { updateSub(s => ({ ...s, nameplates: [...(s.nameplates || []), doc] })); notify("नवीन उपकरण जोडले गेले"); }}
+              />
+            )}
+            {mod === "tripping" && (
+              <TrippingView
+                items={activeSub.trips || []} editMode={editMode} onBack={() => setMod("home")}
+                onAdd={(it) => { updateSub(s => ({ ...s, trips: [it, ...(s.trips || [])] })); notify("ट्रिपिंग नोंद सेव्ह झाली"); }}
+                onDelete={(id) => updateSub(s => ({ ...s, trips: s.trips.filter(x => x.id !== id) }))}
+              />
+            )}
+            {mod === "energy" && (
+              <EnergyView
+                items={activeSub.energy || []} editMode={editMode} onBack={() => setMod("home")}
+                onAdd={(it) => { updateSub(s => ({ ...s, energy: [it, ...(s.energy || [])] })); notify("एनर्जी रीडिंग सेव्ह झाले"); }}
+                onDelete={(id) => updateSub(s => ({ ...s, energy: s.energy.filter(x => x.id !== id) }))}
+              />
+            )}
+            {mod === "loads" && (
+              <SimpleRegisterView
+                title="६. व्होल्टेज व लोड Min/Max रजिस्टर"
+                fields={[
+                  { k:"date", l:"तारीख", def:todayIso() }, { k:"time", l:"वेळ / शिफ्ट", def:"Peak 19:00" },
+                  { k:"v33", l:"33kV Max/Min", def:"33.5 / 31.2 kV" }, { k:"v11", l:"11kV Max/Min", def:"11.6 / 10.5 kV" },
+                  { k:"tf", l:"T/F-1 व T/F-2 Amps", def:"T/F-1: 44A | T/F-2: 40A" }, { k:"fdr", l:"फिडर्स Amps", def:"सफाळा 120A, पारगाव 65A, नवघर 60A" }
+                ]}
+                items={activeSub.loads || []} editMode={editMode} onBack={() => setMod("home")}
+                onAdd={(it) => { updateSub(s => ({ ...s, loads: [it, ...(s.loads || [])] })); notify("लोड नोंद सेव्ह झाली"); }}
+                onDelete={(id) => updateSub(s => ({ ...s, loads: s.loads.filter(x => x.id !== id) }))}
+              />
+            )}
+            {mod === "handover" && (
+              <SimpleRegisterView
+                title="७. शिफ्ट चार्ज हँडओव्हर रजिस्टर"
+                fields={[
+                  { k:"date", l:"तारीख", def:todayIso() }, { k:"shift", l:"शिफ्ट", def:"सकाळ (07:00 - 15:00)" },
+                  { k:"relieved", l:"कार्यभार देणारे", def:"" }, { k:"relieving", l:"कार्यभार घेणारे", def:"" },
+                  { k:"status", l:"चालू फिडर्स स्थिती", def:"T/F-1, T/F-2 व सर्व फिडर्स चालू" }, { k:"lc", l:"प्रलंबित LC / 110V DC", def:"LC नाही | 112.4V DC" }
+                ]}
+                items={activeSub.handovers || []} editMode={editMode} onBack={() => setMod("home")}
+                onAdd={(it) => { updateSub(s => ({ ...s, handovers: [it, ...(s.handovers || [])] })); notify("शिफ्ट हँडओव्हर सेव्ह झाले"); }}
+                onDelete={(id) => updateSub(s => ({ ...s, handovers: s.handovers.filter(x => x.id !== id) }))}
+              />
+            )}
+            {mod === "battery" && (
+              <SimpleRegisterView
+                title="८. 110V DC बॅटरी बँक तपासणी (55 Cells)"
+                fields={[
+                  { k:"date", l:"तारीख", def:todayIso() }, { k:"volt", l:"एकूण DC व्होल्टेज", def:"112.5 V DC" },
+                  { k:"charger", l:"चार्जर (Float/Boost)", def:"Float 2.1 A (Normal)" }, { k:"cell", l:"सेल व्होल्ट / Sp. Gravity", def:"2.05 V / 1.210" },
+                  { k:"remark", l:"शेरा / टॉप-अप", def:"सर्व 55 Cells सुस्थितीत" }
+                ]}
+                items={activeSub.battery || []} editMode={editMode} onBack={() => setMod("home")}
+                onAdd={(it) => { updateSub(s => ({ ...s, battery: [it, ...(s.battery || [])] })); notify("बॅटरी तपासणी सेव्ह झाली"); }}
+                onDelete={(id) => updateSub(s => ({ ...s, battery: s.battery.filter(x => x.id !== id) }))}
+              />
+            )}
+            {mod === "pdf_io" && (
+              <PdfIoView
+                sub={activeSub} lossHistory={mergedLoss} editMode={editMode} onBack={() => setMod("home")}
+                onAddIo={(it) => { updateSub(s => ({ ...s, io: [it, ...(s.io || [])] })); notify("आवक-जावक नोंद सेव्ह झाली"); }}
+                onDeleteIo={(id) => updateSub(s => ({ ...s, io: s.io.filter(x => x.id !== id) }))}
+              />
+            )}
+            {mod === "daily_loss" && (
+              <DailyLossView
+                sub={activeSub} editMode={editMode} onBack={() => setMod("home")}
+                onSaveDay={(dateKey, finalReadings, initialOverrides) => {
+                  updateSub(s => ({ ...s, dailyLosses: { ...(s.dailyLosses || {}), [dateKey]: { finalReadings, initialOverrides } } }));
+                  notify(`${dateKey} दैनिक लॉस रीडिंग सेव्ह झाले`);
+                }}
+              />
+            )}
+            {mod === "minmax" && (
+              <MinMaxView
+                sub={activeSub} editMode={editMode} onBack={() => setMod("home")}
+                onSaveDay={(dateKey, entries) => {
+                  updateSub(s => ({ ...s, minmax: { ...(s.minmax || {}), [dateKey]: entries } }));
+                  notify(`${dateKey} Min-Max नोंद सेव्ह झाली`);
+                }}
+              />
+            )}
+            {mod === "faults" && (
+              <FaultsView
+                sub={activeSub} editMode={editMode} onBack={() => setMod("home")}
+                onAdd={(it) => { updateSub(s => ({ ...s, faults: [it, ...(s.faults || [])] })); notify("बिघाड नोंद सेव्ह झाली"); }}
+                onUpdateStatus={(id, status) => updateSub(s => ({ ...s, faults: s.faults.map(x => x.id === id ? { ...x, status, restoredDate: todayIso() } : x) }))}
+                onDelete={(id) => updateSub(s => ({ ...s, faults: s.faults.filter(x => x.id !== id) }))}
+              />
+            )}
+          </main>
+
+          {eqModal && (
+            <EquipmentModal
+              item={eqModal} editMode={editMode} onClose={() => setEqModal(null)}
+              onSave={(updated) => {
+                updateSub(s => ({ ...s, nameplates: (s.nameplates || []).map(x => x.id === updated.id ? updated : x) }));
+                setEqModal(null); notify("नेमप्लेट अपडेट झाली");
+              }}
+            />
+          )}
+
+          {fbModal && (
+            <FirebaseModal
+              cfg={fbCfg} user={fbUser} syncStatus={syncStatus}
+              onClose={() => setFbModal(false)}
+              onSaveCfg={(c) => { localStorage.setItem(FB_CFG_KEY, JSON.stringify(c)); setFbCfg(c); notify("Firebase Config सेव्ह झाले"); }}
+              onGoogleSignIn={async () => {
+                const sdk = window.__FB_SDK__;
+                if (!fbRef.current.auth) return notify("प्रथम Firebase Config सेव्ह करा");
+                try { await sdk.signInWithPopup(fbRef.current.auth, new sdk.GoogleAuthProvider()); notify("Google साइन-इन यशस्वी!"); }
+                catch (e) { notify("Sign-In त्रुटी: " + e.message); }
+              }}
+              onSignOut={async () => {
+                if (fbRef.current.auth) await window.__FB_SDK__.signOut(fbRef.current.auth);
+                notify("साइन आउट झाले");
+              }}
+            />
+          )}
+
+          {addSubModal && (
+            <AddSubModal
+              onClose={() => setAddSubModal(false)}
+              onCreate={(name, code, division) => {
+                const id = "sub_" + code.replace(/[^a-zA-Z0-9]/g, "") + "_" + Date.now();
+                const created = createDefaultSub(id, name, code, division);
+                commitStore(p => ({ activeId: id, substations: { ...p.substations, [id]: created } }));
+                setAddSubModal(false); notify("नवीन उपकेंद्र तयार झाले");
+              }}
+            />
+          )}
+
+          {toast && <div className="toast">{toast}</div>}
+        </div>
+      );
+    }
+
+    function HomeView({ sub, lossHistory, syncStatus, onOpen, onOpenFb }) {
+      const latest = lossHistory[lossHistory.length - 1];
+      const openFaults = (sub.faults || []).filter(f => f.status === "बिघाड (Open)" || f.status === "दुरुस्ती सुरू").length;
+      return (
+        <div className="mb-4">
+          <div className="hero mb-4">
+            <div className="row between mb-2">
+              <span className="chip" style={{ background: "rgba(255,255,255,0.18)", color: "#fff" }}>⚡ महावितरण (MSEDCL) • डिजिटल उपकेंद्र पोर्टल</span>
+              <button className="btn btn-sm" style={{ background: "rgba(255,255,255,0.18)", color: "#fff", borderColor: "rgba(255,255,255,0.3)" }} onClick={onOpenFb}>
+                {syncStatus}
+              </button>
+            </div>
+            <h1 style={{ fontSize: 22, fontWeight: 800 }}>{sub.name}</h1>
+            <div className="small" style={{ opacity: 0.92, marginTop: 4 }}>{sub.division} • कोड: {sub.code}</div>
+          </div>
+
+          <div className="grid-4 mb-4">
+            <div className="card">
+              <div className="small muted">33kV इनकमर ({latest?.month?.slice(0,3)} {latest?.year})</div>
+              <div style={{ fontSize: 20, fontWeight: 800, color: "var(--primary)", marginTop: 4 }}>{fmtNum(latest?.incomerKwh)} kWh</div>
+              <div className="small muted">2×5 MVA Power T/F</div>
+            </div>
+            <div className="card">
+              <div className="small muted">11kV आउटगोइंग</div>
+              <div style={{ fontSize: 20, fontWeight: 800, color: "var(--green)", marginTop: 4 }}>{fmtNum(latest?.outgoingKwh)} kWh</div>
+              <div className="small muted">4 कार्यरत + 2 स्पेअर बे</div>
+            </div>
+            <div className="card">
+              <div className="small muted">उपकेंद्र लॉस %</div>
+              <div style={{ fontSize: 20, fontWeight: 800, color: "var(--amber)", marginTop: 4 }}>{latest?.lossPct} %</div>
+              <div className="small muted">फरक: {fmtNum(latest?.diffKwh)} kWh</div>
+            </div>
+            <div className="card">
+              <div className="small muted">ट्रिपिंग / प्रलंबित बिघाड</div>
+              <div style={{ fontSize: 20, fontWeight: 800, color: openFaults > 0 ? "var(--red)" : "var(--cyan)", marginTop: 4 }}>
+                {(sub.trips || []).length} ट्रिप / {openFaults} Open
+              </div>
+              <div className="small muted">रिअल-टाइम डेटाबेस</div>
+            </div>
+          </div>
+
+          <div className="grid-3">
+            {MODULES.map(m => (
+              <button key={m.id} className="module-tile" onClick={() => onOpen(m.id)}>
+                <div className="row between">
+                  <span style={{ fontSize: 24 }}>{m.icon}</span>
+                  <span className="chip chip-blue">मॉड्यूल {m.num}</span>
+                </div>
+                <div style={{ fontWeight: 800, fontSize: 15 }}>{m.num}. {m.title}</div>
+                <div className="small muted">{m.desc}</div>
+              </button>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    function ModBar({ title, onBack, right }) {
+      return (
+        <div className="card mb-3 row between">
+          <div className="row">
+            <button className="btn btn-sm" onClick={onBack}>← मुख्य डॅशबोर्ड</button>
+            <h2 style={{ fontSize: 17, fontWeight: 800 }}>{title}</h2>
+          </div>
+          {right}
+        </div>
+      );
+    }
+
+    function SldView({ sub, onToggleSwitch, onOpenEq, onBack }) {
+      const sw = sub.switches || {};
+      const switches = [
+        ["pt33GodClosed", "33kV Bus PT G.O.D."], ["goCouplerClosed", "11kV Bus Coupler G.O.D."],
+        ["capLeftOn", "Cap Bank-1 (Left)"], ["capRightOn", "Cap Bank-2 (Right)"],
+        ["byp_205_206", "Bypass 206↔205"], ["byp_204_205", "Bypass 205↔204"],
+        ["byp_202_203", "Bypass 203↔202"], ["byp_201_202", "Bypass 202↔201"]
+      ];
+      return (
+        <div>
+          <ModBar title="१. सिंगल लाईन डायग्राम (SLD)" onBack={onBack} />
+          <div className="card mb-3">
+            <div className="sld-box">
+              <svg viewBox="0 0 900 380" style={{ width: "100%", minWidth: 740, height: "auto" }}>
+                <line x1="140" y1="20" x2="140" y2="85" stroke="#64748b" strokeWidth="3" strokeDasharray="8,6" />
+                <text x="140" y="15" fill="#94a3b8" fontSize="11" textAnchor="middle">33kV SPARE</text>
+                <line x1="450" y1="20" x2="450" y2="85" stroke="#ef4444" strokeWidth="5" />
+                <text x="450" y="15" fill="#fca5a5" fontSize="12" fontWeight="bold" textAnchor="middle">33kV सफाळे मेन इनकमर (MF 600)</text>
+                <line x1="80" y1="85" x2="820" y2="85" stroke="#ef4444" strokeWidth="7" />
+                <line x1="780" y1="85" x2="780" y2="128" stroke={sw.pt33GodClosed ? "#ef4444" : "#64748b"} strokeWidth="3" />
+                <circle cx="780" cy="138" r="10" fill="none" stroke={sw.pt33GodClosed ? "#34d399" : "#ef4444"} strokeWidth="3" />
+                <text x="780" y="162" fill="#e2e8f0" fontSize="10" textAnchor="middle">33kV PT</text>
+
+                {[{ x: 250, id: "tf_1", lbl: "5 MVA T/F-1" }, { x: 650, id: "tf_2", lbl: "5 MVA T/F-2" }].map(t => (
+                  <g key={t.id} style={{ cursor: "pointer" }} onClick={() => onOpenEq(t.id)}>
+                    <line x1={t.x} y1="85" x2={t.x} y2="145" stroke="#ef4444" strokeWidth="4" />
+                    <rect x={t.x - 16} y="102" width="32" height="20" rx="4" fill="#0f172a" stroke="#34d399" strokeWidth="2.5" />
+                    <circle cx={t.x} cy="162" r="18" fill="none" stroke="#ef4444" strokeWidth="3.5" />
+                    <circle cx={t.x} cy="186" r="18" fill="none" stroke="#38bdf8" strokeWidth="3.5" />
+                    <line x1={t.x} y1="204" x2={t.x} y2="245" stroke="#38bdf8" strokeWidth="4" />
+                    <text x={t.x + 26} y="178" fill="#f8fafc" fontSize="12" fontWeight="bold">{t.lbl}</text>
+                  </g>
+                ))}
+
+                <line x1="60" y1="245" x2="410" y2="245" stroke="#38bdf8" strokeWidth="7" />
+                <line x1="490" y1="245" x2="840" y2="245" stroke="#38bdf8" strokeWidth="7" />
+                {sw.goCouplerClosed ? (
+                  <line x1="410" y1="245" x2="490" y2="245" stroke="#34d399" strokeWidth="6" />
+                ) : (
+                  <line x1="410" y1="245" x2="482" y2="225" stroke="#ef4444" strokeWidth="4" />
+                )}
+                <text x="450" y="218" fill={sw.goCouplerClosed ? "#34d399" : "#fca5a5"} fontSize="11" fontWeight="bold" textAnchor="middle">
+                  BUS COUPLER: {sw.goCouplerClosed ? "CLOSED" : "OPEN"}
+                </text>
+
+                {[
+                  { x: 115, bay: "206 SPARE", spare: true }, { x: 240, bay: "205 सफाळा", eq: "m_205" },
+                  { x: 365, bay: "204 DFCCIL", eq: "m_204" }, { x: 535, bay: "203 नवघर", eq: "m_203" },
+                  { x: 660, bay: "202 SPARE", spare: true }, { x: 785, bay: "201 पारगाव", eq: "m_201" }
+                ].map(f => (
+                  <g key={f.bay} style={{ cursor: f.eq ? "pointer" : "default" }} onClick={() => f.eq && onOpenEq(f.eq)}>
+                    <line x1={f.x} y1="245" x2={f.x} y2="345" stroke={f.spare ? "#64748b" : "#38bdf8"} strokeWidth="4" />
+                    <rect x={f.x - 14} y="268" width="28" height="20" rx="4" fill="#0f172a" stroke={f.spare ? "#64748b" : "#34d399"} strokeWidth="2.5" />
+                    <text x={f.x} y="365" fill={f.spare ? "#94a3b8" : "#f8fafc"} fontSize="12" fontWeight="bold" textAnchor="middle">{f.bay}</text>
+                  </g>
+                ))}
+
+                {[
+                  [115, 240, sw.byp_205_206], [240, 365, sw.byp_204_205],
+                  [535, 660, sw.byp_202_203], [660, 785, sw.byp_201_202]
+                ].map(([x1, x2, on], i) => (
+                  <line key={i} x1={x1} y1="322" x2={x2} y2="322" stroke={on ? "#fbbf24" : "#475569"} strokeWidth={on ? 5 : 2} strokeDasharray={on ? "" : "6,5"} />
+                ))}
+              </svg>
+            </div>
+            <div className="row mt-3">
+              {switches.map(([k, lbl]) => (
+                <button key={k} className={`btn btn-sm ${sw[k] ? "btn-green" : "btn-red"}`} onClick={() => onToggleSwitch(k)}>
+                  {lbl}: {sw[k] ? "ON / CLOSED" : "OFF / OPEN"}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function AnalyticsView({ lossHistory, editMode, onAddLoss, onBack }) {
+      const [year, setYear] = useState(2026);
+      const [monthIdx, setMonthIdx] = useState(9);
+      const [inc, setInc] = useState("");
+      const [out, setOut] = useState("");
+      const feeders = RAW_SUMMARY.filter(x => x.year === year && x.monthIdx === monthIdx);
+      const loss = lossHistory.find(x => x.year === year && x.monthIdx === monthIdx);
+      const yearLosses = lossHistory.filter(x => x.year === year);
+      const maxKwh = Math.max(...yearLosses.map(x => x.incomerKwh), 1);
+      const pdfId = feeders.find(x => x.drivePdfId)?.drivePdfId;
+
+      return (
+        <div>
+          <ModBar title="२. २०२४–२०२६ ॲनालिटिक्स व PDF" onBack={onBack} />
+          <div className="card mb-3 row">
+            {[2024, 2025, 2026].map(y => (
+              <button key={y} className={`tab ${year === y ? "active" : ""}`} onClick={() => setYear(y)}>{y}</button>
+            ))}
+            <select style={{ width: 170 }} value={monthIdx} onChange={e => setMonthIdx(Number(e.target.value))}>
+              {MONTHS.map((m, i) => <option key={m} value={i}>{m}</option>)}
+            </select>
+            {pdfId && (
+              <a className="btn btn-primary btn-sm" href={`https://drive.google.com/file/d/${pdfId}/view`} target="_blank" rel="noreferrer">
+                📄 Google Drive मूळ PDF पहा
+              </a>
+            )}
+          </div>
+
+          <div className="grid-4 mb-3">
+            <div className="card"><div className="small muted">33kV इनकमर</div><div style={{ fontSize: 19, fontWeight: 800, color: "var(--primary)" }}>{fmtNum(loss?.incomerKwh)} kWh</div></div>
+            <div className="card"><div className="small muted">11kV आउटगोइंग</div><div style={{ fontSize: 19, fontWeight: 800, color: "var(--green)" }}>{fmtNum(loss?.outgoingKwh)} kWh</div></div>
+            <div className="card"><div className="small muted">लॉस %</div><div style={{ fontSize: 19, fontWeight: 800, color: "var(--amber)" }}>{loss ? `${loss.lossPct} %` : "N/A"}</div></div>
+            <div className="card"><div className="small muted">एकूण ट्रिपिंग</div><div style={{ fontSize: 19, fontWeight: 800 }}>{feeders.reduce((a,b) => a + b.totalTripping, 0)}</div></div>
+          </div>
+
+          <div className="card mb-3">
+            <div style={{ fontWeight: 800 }} className="mb-2">{year} मासिक इनकमर (kWh) बार चार्ट</div>
+            <div style={{ display: "flex", alignItems: "flex-end", gap: 8, height: 140, paddingTop: 12 }}>
+              {yearLosses.map(l => (
+                <div key={l.monthIdx} style={{ flex: 1, textAlign: "center", cursor: "pointer" }} onClick={() => setMonthIdx(l.monthIdx)}>
+                  <div style={{ height: `${Math.max(10, (l.incomerKwh / maxKwh) * 110)}px`, background: l.monthIdx === monthIdx ? "#d97706" : "#1d4ed8", borderRadius: "6px 6px 0 0" }} title={`${l.month}: ${fmtNum(l.incomerKwh)} kWh (${l.lossPct}%)`} />
+                  <div className="small muted" style={{ fontSize: 10 }}>{l.month.slice(0,3)}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="card mb-3">
+            <div style={{ fontWeight: 800 }} className="mb-2">फिडरनिहाय कामगिरी — {MONTHS[monthIdx]} {year}</div>
+            <div className="table-wrap">
+              <table>
+                <thead><tr><th>फिडर</th><th>TP</th><th>HT</th><th>SD</th><th>BD</th><th>LS</th><th>Total</th><th>Min</th><th>Max A</th><th>Min A</th></tr></thead>
+                <tbody>
+                  {feeders.length === 0 ? <tr><td colSpan="10">या महिन्याचा डेटा उपलब्ध नाही</td></tr> : feeders.map(f => (
+                    <tr key={f.feederIdx}><td><b>{f.feeder}</b></td><td>{f.tp}</td><td>{f.ht}</td><td>{f.sd}</td><td>{f.bd}</td><td>{f.ls}</td><td><b>{f.totalTripping}</b></td><td>{f.durationMin}</td><td>{f.maxLoad}</td><td>{f.minLoad}</td></tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {editMode && (
+            <div className="card">
+              <div style={{ fontWeight: 800 }} className="mb-2">{MONTHS[monthIdx]} {year} लॉस डेटा अपडेट / जोडा</div>
+              <div className="grid-3">
+                <div><label className="fl">33kV इनकमर (kWh)</label><input className="input" type="number" value={inc} onChange={e => setInc(e.target.value)} /></div>
+                <div><label className="fl">11kV आउटगोइंग (kWh)</label><input className="input" type="number" value={out} onChange={e => setOut(e.target.value)} /></div>
+                <div style={{ alignSelf: "end" }}>
+                  <button className="btn btn-primary" style={{ width: "100%" }} onClick={() => {
+                    const i = +inc, o = +out; if (!i) return;
+                    onAddLoss({ year, monthIdx, month: MONTHS[monthIdx], incomerKwh: i, outgoingKwh: o, diffKwh: i - o, lossPct: Math.round(((i - o) / i) * 100000) / 1000 });
+                    setInc(""); setOut("");
+                  }}>सेव्ह करा</button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    function EquipmentView({ items, editMode, onSelect, onAdd, onBack }) {
+      const [cat, setCat] = useState("transformers");
+      const cats = [["transformers","ट्रान्सफॉर्मर्स"],["cts","C.T. (R-Y-B)"],["pts","P.T. (R-Y-B)"],["vcbs","VCB ब्रेकर्स"],["aux","SECURE मीटर्स व इतर"]];
+      const filtered = items.filter(x => x.category === cat);
+      return (
+        <div>
+          <ModBar title="३. यंत्रसामग्री व R-Y-B नेमप्लेट मास्टर" onBack={onBack} right={editMode && (
+            <button className="btn btn-primary btn-sm" onClick={() => onAdd({ id: `${cat}_${Date.now()}`, category: cat, bay: "New Bay", name: "नवीन उपकरण", status: "In Service (ON)", make: "", serialNo: "", year: "2026", specs: { spec: "" } })}>+ नवीन उपकरण</button>
+          )} />
+          <div className="tabs mb-3">
+            {cats.map(([k, l]) => <button key={k} className={`tab ${cat === k ? "active" : ""}`} onClick={() => setCat(k)}>{l} ({items.filter(x => x.category === k).length})</button>)}
+          </div>
+          <div className="grid-2">
+            {filtered.map(it => (
+              <div key={it.id} className="card" style={{ cursor: "pointer" }} onClick={() => onSelect(it)}>
+                <div className="row between mb-2">
+                  <span className="small" style={{ color: "var(--primary)", fontWeight: 700 }}>{it.bay}</span>
+                  <span className="chip chip-green">{it.status}</span>
+                </div>
+                <div style={{ fontWeight: 800, fontSize: 15 }}>{it.name}</div>
+                <div className="small muted mt-2">Make: {it.make || "-"} • S/N: {it.serialNo || "-"} • Year: {it.year || "-"}</div>
+                {it.specs?.r && <div className="small mt-2 mono">R: {it.specs.r} | Y: {it.specs.y} | B: {it.specs.b}</div>}
+                {it.specs?.spec && <div className="small mt-2" style={{ color: "var(--primary)" }}>{it.specs.spec}</div>}
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    function EquipmentModal({ item, editMode, onClose, onSave }) {
+      const [form, setForm] = useState(item);
+      return (
+        <div className="modal-backdrop" onClick={onClose}>
+          <div className="modal-box" onClick={e => e.stopPropagation()}>
+            <h3 className="mb-3">{item.name}</h3>
+            <div className="grid-2 mb-3">
+              <div><label className="fl">बे / फिडर</label><input className="input" disabled={!editMode} value={form.bay} onChange={e => setForm({ ...form, bay: e.target.value })} /></div>
+              <div><label className="fl">स्थिती</label><input className="input" disabled={!editMode} value={form.status} onChange={e => setForm({ ...form, status: e.target.value })} /></div>
+              <div><label className="fl">कंपनी (Make)</label><input className="input" disabled={!editMode} value={form.make} onChange={e => setForm({ ...form, make: e.target.value })} /></div>
+              <div><label className="fl">सिरीयल नं.</label><input className="input" disabled={!editMode} value={form.serialNo} onChange={e => setForm({ ...form, serialNo: e.target.value })} /></div>
+            </div>
+            <div className="mb-3"><label className="fl">तांत्रिक तपशील</label><textarea rows="3" disabled={!editMode} value={form.specs?.spec || ""} onChange={e => setForm({ ...form, specs: { ...(form.specs || {}), spec: e.target.value } })} /></div>
+            <div className="row between">
+              <button className="btn" onClick={onClose}>बंद करा</button>
+              {editMode && <button className="btn btn-primary" onClick={() => onSave(form)}>सेव्ह करा</button>}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function TrippingView({ items, editMode, onAdd, onDelete, onBack }) {
+      const [f, setF] = useState({ date: todayIso(), type: TRIP_TYPES[0], feeder: TRIP_FEEDERS[5], offTime: "10:00", onTime: "10:15", relay: "", remark: "" });
+      const dur = calcDurMin(f.offTime, f.onTime);
+      return (
+        <div>
+          <ModBar title="४. दैनंदिन ट्रिपिंग / शटडाउन रजिस्टर" onBack={onBack} />
+          {editMode && (
+            <div className="card mb-3">
+              <div className="grid-3 mb-2">
+                <div><label className="fl">तारीख</label><input className="input" type="date" value={f.date} onChange={e => setF({ ...f, date: e.target.value })} /></div>
+                <div><label className="fl">प्रकार</label><select value={f.type} onChange={e => setF({ ...f, type: e.target.value })}>{TRIP_TYPES.map(x => <option key={x}>{x}</option>)}</select></div>
+                <div><label className="fl">फिडर</label><select value={f.feeder} onChange={e => setF({ ...f, feeder: e.target.value })}>{TRIP_FEEDERS.map(x => <option key={x}>{x}</option>)}</select></div>
+                <div><label className="fl">बंद वेळ</label><input className="input" type="time" value={f.offTime} onChange={e => setF({ ...f, offTime: e.target.value })} /></div>
+                <div><label className="fl">चालू वेळ</label><input className="input" type="time" value={f.onTime} onChange={e => setF({ ...f, onTime: e.target.value })} /></div>
+                <div><label className="fl">रिले / कारण</label><input className="input" value={f.relay} onChange={e => setF({ ...f, relay: e.target.value })} placeholder="O/C, E/F, LC..." /></div>
+              </div>
+              <div className="row between">
+                <span className="chip chip-blue">कालावधी: {dur} मिनिटे</span>
+                <button className="btn btn-primary" onClick={() => { onAdd({ ...f, id: "tr_" + Date.now(), durationMin: dur }); setF({ ...f, relay: "", remark: "" }); }}>नोंद सेव्ह करा</button>
+              </div>
+            </div>
+          )}
+          <div className="card table-wrap">
+            <table>
+              <thead><tr><th>तारीख</th><th>प्रकार</th><th>फिडर</th><th>वेळ</th><th>मि.</th><th>रिले/कारण</th>{editMode && <th></th>}</tr></thead>
+              <tbody>
+                {items.length === 0 ? <tr><td colSpan="7">अद्याप नोंद नाही</td></tr> : items.map(x => (
+                  <tr key={x.id}><td>{fmtDmy(x.date)}</td><td>{x.type.split(" -")[0]}</td><td><b>{x.feeder}</b></td><td>{x.offTime}–{x.onTime}</td><td>{x.durationMin}</td><td>{x.relay}</td>{editMode && <td><button className="btn btn-sm btn-red" onClick={() => onDelete(x.id)}>✕</button></td>}</tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      );
+    }
+
+    function EnergyView({ items, editMode, onAdd, onDelete, onBack }) {
+      const [mIdx, setMIdx] = useState(0);
+      const [date, setDate] = useState(todayIso());
+      const [openR, setOpenR] = useState("");
+      const [closeR, setCloseR] = useState("");
+      const sel = ENERGY_METERS[mIdx];
+      const units = Math.max(0, ((+closeR || 0) - (+openR || 0)) * sel.mf);
+      return (
+        <div>
+          <ModBar title="५. दैनिक / मासिक एनर्जी व लॉसेस (Auto MF)" onBack={onBack} />
+          {editMode && (
+            <div className="card mb-3 grid-4">
+              <div><label className="fl">तारीख</label><input className="input" type="date" value={date} onChange={e => setDate(e.target.value)} /></div>
+              <div><label className="fl">SECURE मीटर (MF {sel.mf})</label><select value={mIdx} onChange={e => setMIdx(+e.target.value)}>{ENERGY_METERS.map((m,i) => <option key={m.label} value={i}>{m.label}</option>)}</select></div>
+              <div><label className="fl">Open / Close</label><div className="row"><input className="input" type="number" placeholder="Open" value={openR} onChange={e => setOpenR(e.target.value)} /><input className="input" type="number" placeholder="Close" value={closeR} onChange={e => setCloseR(e.target.value)} /></div></div>
+              <div style={{ alignSelf: "end" }}><button className="btn btn-green" style={{ width: "100%" }} onClick={() => { if (!openR || !closeR) return; onAdd({ id: "en_" + Date.now(), date, meter: sel.label, mf: sel.mf, openR: +openR, closeR: +closeR, units }); setOpenR(""); setCloseR(""); }}>सेव्ह ({fmtNum(units)} kWh)</button></div>
+            </div>
+          )}
+          <div className="card table-wrap">
+            <table>
+              <thead><tr><th>तारीख</th><th>मीटर</th><th>Open</th><th>Close</th><th>MF</th><th>युनिट्स (kWh)</th>{editMode && <th></th>}</tr></thead>
+              <tbody>
+                {items.length === 0 ? <tr><td colSpan="7">अद्याप नोंद नाही</td></tr> : items.map(x => (
+                  <tr key={x.id}><td>{fmtDmy(x.date)}</td><td><b>{x.meter}</b></td><td className="num">{x.openR}</td><td className="num">{x.closeR}</td><td className="num">{x.mf}</td><td className="num"><b>{fmtNum(x.units)}</b></td>{editMode && <td><button className="btn btn-sm btn-red" onClick={() => onDelete(x.id)}>✕</button></td>}</tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      );
+    }
+
+    function SimpleRegisterView({ title, fields, items, editMode, onAdd, onDelete, onBack }) {
+      const init = () => Object.fromEntries(fields.map(f => [f.k, f.def]));
+      const [form, setForm] = useState(init);
+      return (
+        <div>
+          <ModBar title={title} onBack={onBack} />
+          {editMode && (
+            <div className="card mb-3">
+              <div className="grid-3 mb-2">
+                {fields.map(f => (
+                  <div key={f.k}><label className="fl">{f.l}</label><input className="input" value={form[f.k]} onChange={e => setForm({ ...form, [f.k]: e.target.value })} /></div>
+                ))}
+              </div>
+              <button className="btn btn-primary" onClick={() => { onAdd({ ...form, id: "reg_" + Date.now() }); setForm(init()); }}>नोंद सेव्ह करा</button>
+            </div>
+          )}
+          <div className="card table-wrap">
+            <table>
+              <thead><tr>{fields.map(f => <th key={f.k}>{f.l}</th>)}{editMode && <th></th>}</tr></thead>
+              <tbody>
+                {items.length === 0 ? <tr><td colSpan={fields.length + 1}>अद्याप नोंद नाही</td></tr> : items.map(it => (
+                  <tr key={it.id}>{fields.map(f => <td key={f.k}>{it[f.k]}</td>)}{editMode && <td><button className="btn btn-sm btn-red" onClick={() => onDelete(it.id)}>✕</button></td>}</tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      );
+    }
+
+    function PdfIoView({ sub, lossHistory, editMode, onAddIo, onDeleteIo, onBack }) {
+      const [year, setYear] = useState(2026);
+      const [mIdx, setMIdx] = useState(9);
+      const [io, setIo] = useState({ date: todayIso(), type: "आवक (Inward)", refNo: "", party: "", subject: "" });
+
+      const printA4 = () => {
+        const loss = lossHistory.find(x => x.year === year && x.monthIdx === mIdx);
+        const fdrs = RAW_SUMMARY.filter(x => x.year === year && x.monthIdx === mIdx);
+        const rows = fdrs.map(r => `<tr><td class="l">${r.feeder}</td><td>${r.tp}</td><td>${r.ht}</td><td>${r.sd}</td><td>${r.bd}</td><td>${r.ls}</td><td><b>${r.totalTripping}</b></td><td>${r.durationMin}</td><td>${r.maxLoad}</td><td>${r.minLoad}</td></tr>`).join("");
+        printHtmlDoc(`Sartodi_${MONTHS[mIdx]}_${year}`, `
+          <h2>${sub.name} (कोड: ${sub.code})</h2>
+          <h3>मासिक तांत्रिक अहवाल — ${MONTHS[mIdx]} ${year}</h3>
+          <table><tr><th>33kV Incomer (kWh)</th><th>11kV Outgoing (kWh)</th><th>Diff (kWh)</th><th>Loss %</th></tr>
+          <tr><td>${fmtNum(loss?.incomerKwh)}</td><td>${fmtNum(loss?.outgoingKwh)}</td><td>${fmtNum(loss?.diffKwh)}</td><td>${loss ? loss.lossPct + " %" : "N/A"}</td></tr></table>
+          <table><tr><th>Feeder</th><th>TP</th><th>HT</th><th>SD</th><th>BD</th><th>LS</th><th>Total</th><th>Min</th><th>Max A</th><th>Min A</th></tr>${rows || '<tr><td colspan="10">No Data</td></tr>'}</table>
+        `);
+      };
+
+      return (
+        <div>
+          <ModBar title="९. आवक-जावक व मासिक A4 PDF अहवाल" onBack={onBack} />
+          <div className="card mb-3 row">
+            <select style={{ width: 100 }} value={year} onChange={e => setYear(+e.target.value)}>{[2024,2025,2026].map(y => <option key={y}>{y}</option>)}</select>
+            <select style={{ width: 160 }} value={mIdx} onChange={e => setMIdx(+e.target.value)}>{MONTHS.map((m,i) => <option key={m} value={i}>{m}</option>)}</select>
+            <button className="btn btn-primary" onClick={printA4}>🖨️ A4 मासिक PDF प्रिंट / सेव्ह करा</button>
+          </div>
+          {editMode && (
+            <div className="card mb-3 grid-3">
+              <div><label className="fl">तारीख</label><input className="input" type="date" value={io.date} onChange={e => setIo({ ...io, date: e.target.value })} /></div>
+              <div><label className="fl">प्रकार</label><select value={io.type} onChange={e => setIo({ ...io, type: e.target.value })}><option>आवक (Inward)</option><option>जावक (Outward)</option></select></div>
+              <div><label className="fl">पत्र क्रमांक</label><input className="input" value={io.refNo} onChange={e => setIo({ ...io, refNo: e.target.value })} /></div>
+              <div><label className="fl">कार्यालय / व्यक्ती</label><input className="input" value={io.party} onChange={e => setIo({ ...io, party: e.target.value })} /></div>
+              <div><label className="fl">विषय</label><input className="input" value={io.subject} onChange={e => setIo({ ...io, subject: e.target.value })} /></div>
+              <div style={{ alignSelf: "end" }}><button className="btn btn-green" style={{ width: "100%" }} onClick={() => { if (!io.subject) return; onAddIo({ ...io, id: "io_" + Date.now() }); setIo({ ...io, refNo: "", party: "", subject: "" }); }}>नोंद सेव्ह करा</button></div>
+            </div>
+          )}
+          <div className="card table-wrap">
+            <table>
+              <thead><tr><th>तारीख</th><th>प्रकार</th><th>संदर्भ क्र.</th><th>कोणाकडून/कोणास</th><th>विषय</th>{editMode && <th></th>}</tr></thead>
+              <tbody>{(sub.io || []).length === 0 ? <tr><td colSpan="6">अद्याप नोंद नाही</td></tr> : (sub.io || []).map(x => (
+                <tr key={x.id}><td>{fmtDmy(x.date)}</td><td>{x.type}</td><td>{x.refNo}</td><td>{x.party}</td><td><b>{x.subject}</b></td>{editMode && <td><button className="btn btn-sm btn-red" onClick={() => onDeleteIo(x.id)}>✕</button></td>}</tr>
+              ))}</tbody>
+            </table>
+          </div>
+        </div>
+      );
+    }
+
+    function DailyLossView({ sub, editMode, onSaveDay, onBack }) {
+      const [dateKey, setDateKey] = useState(todayIso());
+      const [finals, setFinals] = useState({});
+      const [inits, setInits] = useState({});
+      useEffect(() => {
+        const d = (sub.dailyLosses && sub.dailyLosses[dateKey]) || { finalReadings: {}, initialOverrides: {} };
+        setFinals(d.finalReadings || {}); setInits(d.initialOverrides || {});
+      }, [dateKey, sub.dailyLosses]);
+
+      const previewDays = { ...(sub.dailyLosses || {}), [dateKey]: { finalReadings: finals, initialOverrides: inits } };
+      const calc = calcDailyLoss(dateKey, previewDays, sub.lossMf);
+
+      return (
+        <div>
+          <ModBar title="१०. दैनिक लॉसेस रजिस्टर (Loss Calc)" onBack={onBack} right={
+            <button className="btn btn-primary btn-sm" onClick={() => printHtmlDoc(`DailyLoss_${dateKey}`, `
+              <h2>${sub.name} — DAILY LOSS (${fmtDmy(dateKey)})</h2>
+              <table><tr><th>Meter</th><th>Initial</th><th>Final</th><th>Diff</th><th>MF</th><th>Consumption (kWh)</th></tr>
+              ${calc.rows.map(r => `<tr><td class="l">${r.meter.name}</td><td>${r.initialVal ?? ""}</td><td>${r.finalVal ?? ""}</td><td>${r.diff?.toFixed(2) ?? ""}</td><td>${r.mf}</td><td><b>${fmtNum(r.cons)}</b></td></tr>`).join("")}</table>
+              <table><tr><th>Comparison</th><th>Diff (kWh)</th><th>Loss %</th></tr>
+              ${calc.lossRows.map(l => `<tr><td class="l">${l.label}</td><td>${fmtNum(l.diff)}</td><td><b>${l.pct != null ? l.pct.toFixed(3) + " %" : "—"}</b></td></tr>`).join("")}</table>
+            `)}>🖨️ PDF प्रिंट</button>
+          } />
+          <div className="card mb-3 row between">
+            <div className="row"><label className="fl" style={{ margin: 0 }}>तारीख:</label><input className="input" style={{ width: 170 }} type="date" value={dateKey} onChange={e => setDateKey(e.target.value)} /></div>
+            {editMode && <button className="btn btn-green" onClick={() => onSaveDay(dateKey, finals, inits)}>💾 {dateKey} सेव्ह करा</button>}
+          </div>
+          <div className="card table-wrap mb-3">
+            <table>
+              <thead><tr><th>मीटर</th><th>Initial @00:00</th><th>Final @24:00</th><th>Diff</th><th>M.F.</th><th>Consumption (kWh)</th></tr></thead>
+              <tbody>
+                {calc.rows.map(r => (
+                  <tr key={r.meter.id}>
+                    <td><b>{r.meter.name}</b></td>
+                    <td><input className="input" style={{ width: 110 }} type="number" disabled={!editMode} placeholder={r.initialVal != null ? `Auto: ${r.initialVal}` : "Initial"} value={inits[r.meter.id] ?? ""} onChange={e => setInits({ ...inits, [r.meter.id]: e.target.value === "" ? undefined : +e.target.value })} /></td>
+                    <td><input className="input" style={{ width: 110 }} type="number" disabled={!editMode} placeholder="Final" value={finals[r.meter.id] ?? ""} onChange={e => setFinals({ ...finals, [r.meter.id]: e.target.value === "" ? undefined : +e.target.value })} /></td>
+                    <td className="num">{r.diff != null ? r.diff.toFixed(2) : "—"}</td>
+                    <td className="num">{r.mf}</td>
+                    <td className="num"><b>{fmtNum(r.cons)}</b></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="card table-wrap">
+            <table>
+              <thead><tr><th>लॉस तुलना (९ पंक्ती)</th><th className="num">फरक (kWh)</th><th className="num">लॉस %</th></tr></thead>
+              <tbody>{calc.lossRows.map(l => <tr key={l.label}><td><b>{l.label}</b></td><td className="num">{fmtNum(l.diff)}</td><td className="num"><b>{l.pct != null ? `${l.pct.toFixed(3)} %` : "—"}</b></td></tr>)}</tbody>
+            </table>
+          </div>
+        </div>
+      );
+    }
+
+    function MinMaxView({ sub, editMode, onSaveDay, onBack }) {
+      const [dateKey, setDateKey] = useState(todayIso());
+      const [entries, setEntries] = useState({});
+      useEffect(() => { setEntries((sub.minmax && sub.minmax[dateKey]) || {}); }, [dateKey, sub.minmax]);
+      const setField = (id, k, v) => setEntries(p => ({ ...p, [id]: { ...(p[id] || {}), [k]: v } }));
+      return (
+        <div>
+          <ModBar title="११. दैनिक Min-Max नोंद व मासिक रिपोर्ट PDF" onBack={onBack} right={
+            <button className="btn btn-primary btn-sm" onClick={() => printHtmlDoc(`MinMax_${dateKey}`, `
+              <h2>${sub.name} — MIN-MAX REPORT (${fmtDmy(dateKey)})</h2>
+              <table><tr><th>Feeder</th><th>Max</th><th>Max Time</th><th>Min</th><th>Min Time</th></tr>
+              ${MINMAX_ITEMS.map(it => { const e = entries[it.id] || {}; return `<tr><td class="l">${it.name} (${it.unit})</td><td>${e.mx || ""}</td><td>${e.mxT || ""}</td><td>${e.mn || ""}</td><td>${e.mnT || ""}</td></tr>`; }).join("")}</table>
+            `)}>🖨️ PDF प्रिंट</button>
+          } />
+          <div className="card mb-3 row between">
+            <input className="input" style={{ width: 170 }} type="date" value={dateKey} onChange={e => setDateKey(e.target.value)} />
+            {editMode && <button className="btn btn-green" onClick={() => onSaveDay(dateKey, entries)}>💾 {dateKey} सेव्ह करा</button>}
+          </div>
+          <div className="card table-wrap">
+            <table>
+              <thead><tr><th>फिडर / घटक</th><th>Max</th><th>Max वेळ</th><th>Min</th><th>Min वेळ</th></tr></thead>
+              <tbody>
+                {MINMAX_ITEMS.map(it => {
+                  const e = entries[it.id] || {};
+                  return (
+                    <tr key={it.id}>
+                      <td><b>{it.name} ({it.unit})</b></td>
+                      <td><input className="input" style={{ width: 90 }} disabled={!editMode} value={e.mx || ""} onChange={ev => setField(it.id, "mx", ev.target.value)} /></td>
+                      <td><input className="input" style={{ width: 100 }} type="time" disabled={!editMode} value={e.mxT || ""} onChange={ev => setField(it.id, "mxT", ev.target.value)} /></td>
+                      <td><input className="input" style={{ width: 90 }} disabled={!editMode} value={e.mn || ""} onChange={ev => setField(it.id, "mn", ev.target.value)} /></td>
+                      <td><input className="input" style={{ width: 100 }} type="time" disabled={!editMode} value={e.mnT || ""} onChange={ev => setField(it.id, "mnT", ev.target.value)} /></td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      );
+    }
+
+    function FaultsView({ sub, editMode, onAdd, onUpdateStatus, onDelete, onBack }) {
+      const [f, setF] = useState({ date: todayIso(), equip: FAULT_EQUIPS[0], bay: "", faultDesc: "", actionTaken: "", status: FAULT_STATUSES[0], oldSn: "", newSn: "" });
+      const faults = sub.faults || [];
+      return (
+        <div>
+          <ModBar title="१२. यंत्रसामग्री बिघाड / दुरुस्ती रजिस्टर" onBack={onBack} />
+          {editMode && (
+            <div className="card mb-3">
+              <div className="grid-3 mb-2">
+                <div><label className="fl">तारीख</label><input className="input" type="date" value={f.date} onChange={e => setF({ ...f, date: e.target.value })} /></div>
+                <div><label className="fl">यंत्रसामग्री</label><select value={f.equip} onChange={e => setF({ ...f, equip: e.target.value })}>{FAULT_EQUIPS.map(x => <option key={x}>{x}</option>)}</select></div>
+                <div><label className="fl">स्थिती</label><select value={f.status} onChange={e => setF({ ...f, status: e.target.value })}>{FAULT_STATUSES.map(x => <option key={x}>{x}</option>)}</select></div>
+                <div><label className="fl">बिघाड तपशील *</label><input className="input" value={f.faultDesc} onChange={e => setF({ ...f, faultDesc: e.target.value })} /></div>
+                <div><label className="fl">कार्यवाही</label><input className="input" value={f.actionTaken} onChange={e => setF({ ...f, actionTaken: e.target.value })} /></div>
+                <div><label className="fl">जुना → नवीन S/N</label><div className="row"><input className="input" placeholder="जुना" value={f.oldSn} onChange={e => setF({ ...f, oldSn: e.target.value })} /><input className="input" placeholder="नवीन" value={f.newSn} onChange={e => setF({ ...f, newSn: e.target.value })} /></div></div>
+              </div>
+              <button className="btn btn-primary" onClick={() => { if (!f.faultDesc) return; onAdd({ ...f, id: "fm_" + Date.now(), restoredDate: "" }); setF({ ...f, faultDesc: "", actionTaken: "", oldSn: "", newSn: "" }); }}>बिघाड नोंद सेव्ह करा</button>
+            </div>
+          )}
+          <div className="card table-wrap">
+            <table>
+              <thead><tr><th>तारीख</th><th>यंत्रसामग्री</th><th>बिघाड व कार्यवाही</th><th>S/N</th><th>स्थिती</th>{editMode && <th>क्रिया</th>}</tr></thead>
+              <tbody>
+                {faults.length === 0 ? <tr><td colSpan="6">अद्याप बिघाड नोंद नाही</td></tr> : faults.map(x => (
+                  <tr key={x.id}>
+                    <td>{fmtDmy(x.date)}</td><td><b>{x.equip}</b></td><td>{x.faultDesc}<div className="small muted">{x.actionTaken}</div></td>
+                    <td className="mono small">{x.oldSn || "-"} → {x.newSn || "-"}</td>
+                    <td><span className={`chip ${x.status.includes("Open") ? "chip-red" : "chip-green"}`}>{x.status}</span></td>
+                    {editMode && <td className="row"><button className="btn btn-sm btn-green" onClick={() => onUpdateStatus(x.id, "दुरुस्त झाले")}>✓ दुरुस्त</button><button className="btn btn-sm btn-red" onClick={() => onDelete(x.id)}>✕</button></td>}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      );
+    }
+
+    function FirebaseModal({ cfg, user, syncStatus, onClose, onSaveCfg, onGoogleSignIn, onSignOut }) {
+      const [jsonText, setJsonText] = useState(cfg ? JSON.stringify(cfg, null, 2) : `{\n  "apiKey": "",\n  "authDomain": "sartodi-substation-284619.firebaseapp.com",\n  "projectId": "sartodi-substation-284619",\n  "storageBucket": "sartodi-substation-284619.firebasestorage.app",\n  "messagingSenderId": "",\n  "appId": ""\n}`);
+      return (
+        <div className="modal-backdrop" onClick={onClose}>
+          <div className="modal-box" onClick={e => e.stopPropagation()}>
+            <h3 className="mb-2">☁️ Firebase रिअल-टाइम डेटाबेस सेटअप</h3>
+            <p className="small muted mb-3">स्थिती: <b>{syncStatus}</b>. Firebase Console → Project Settings → Your Web App मधील `firebaseConfig` JSON येथे पेस्ट करून सेव्ह करा.</p>
+            <textarea rows="8" className="mono mb-3" value={jsonText} onChange={e => setJsonText(e.target.value)} />
+            <div className="row between">
+              <div className="row">
+                <button className="btn btn-primary" onClick={() => {
+                  try { onSaveCfg(JSON.parse(jsonText)); } catch { alert("कृपया वैध JSON पेस्ट करा."); }
+                }}>Config सेव्ह करा</button>
+                {!user ? (
+                  <button className="btn btn-green" onClick={onGoogleSignIn}>Google ने साइन-इन करा</button>
+                ) : (
+                  <button className="btn btn-red" onClick={onSignOut}>साइन आउट ({user.email})</button>
+                )}
+              </div>
+              <button className="btn" onClick={onClose}>बंद करा</button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function AddSubModal({ onClose, onCreate }) {
+      const [name, setName] = useState(""); const [code, setCode] = useState(""); const [div, setDiv] = useState("पालघर विभाग (MSEDCL)");
+      return (
+        <div className="modal-backdrop" onClick={onClose}>
+          <div className="modal-box" onClick={e => e.stopPropagation()}>
+            <h3 className="mb-3">नवीन उपकेंद्र जोडा</h3>
+            <div className="mb-2"><label className="fl">उपकेंद्राचे नाव *</label><input className="input" value={name} onChange={e => setName(e.target.value)} /></div>
+            <div className="mb-2"><label className="fl">उपकेंद्र कोड *</label><input className="input" value={code} onChange={e => setCode(e.target.value)} /></div>
+            <div className="mb-3"><label className="fl">शाखा / विभाग</label><input className="input" value={div} onChange={e => setDiv(e.target.value)} /></div>
+            <div className="row between">
+              <button className="btn" onClick={onClose}>रद्द</button>
+              <button className="btn btn-primary" onClick={() => { if (name && code) onCreate(name, code, div); }}>तयार करा</button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+</body>
+</html>

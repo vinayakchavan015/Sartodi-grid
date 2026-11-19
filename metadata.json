@@ -1,0 +1,6 @@
+{
+  "name": "सरतोडी उपकेंद्र",
+  "description": "महावितरण (MSEDCL) 33/11 kV सरतोडी उपकेंद्र (284619) व्यवस्थापन — रिअल-टाइम फायरबेस सिंक, सिंगल लाईन डायग्राम (SLD), दैनिक व मासिक लॉसेस, Min-Max अहवाल, ट्रिपिंग/बिघाड रजिस्टर आणि नेमप्लेट मास्टर.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

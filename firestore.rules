@@ -1,0 +1,343 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Pillar 1: Global default-deny safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Global hardened helper primitives
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidTimestamp(ts) {
+      return ts is timestamp && ts <= request.time;
+    }
+
+    function isBoundedString(val, minLen, maxLen) {
+      return val is string && val.size() >= minLen && val.size() <= maxLen;
+    }
+
+    function isNum(val) {
+      return val is int || val is float;
+    }
+
+    // Entity validation blueprints
+    function isValidSubstation(data) {
+      return data.keys().hasAll(['name', 'code', 'division', 'switches', 'lossMf', 'createdAt', 'updatedAt']) &&
+             data.keys().hasOnly(['name', 'code', 'division', 'switches', 'lossMf', 'createdAt', 'updatedAt']) &&
+             isBoundedString(data.name, 1, 140) &&
+             isBoundedString(data.code, 1, 40) &&
+             isBoundedString(data.division, 1, 200) &&
+             data.switches is map && data.switches.size() <= 20 &&
+             data.lossMf is map && data.lossMf.size() <= 20 &&
+             isValidTimestamp(data.createdAt) &&
+             isValidTimestamp(data.updatedAt);
+    }
+
+    function isValidTripEntry(data) {
+      return data.keys().hasAll(['date', 'type', 'feeder', 'offTime', 'onTime', 'duration', 'durationMin', 'relay', 'remark', 'createdAt', 'updatedAt']) &&
+             data.keys().hasOnly(['date', 'type', 'feeder', 'offTime', 'onTime', 'duration', 'durationMin', 'relay', 'remark', 'createdAt', 'updatedAt']) &&
+             isBoundedString(data.date, 8, 20) &&
+             isBoundedString(data.type, 1, 80) &&
+             isBoundedString(data.feeder, 1, 120) &&
+             isBoundedString(data.offTime, 1, 20) &&
+             isBoundedString(data.onTime, 1, 20) &&
+             isBoundedString(data.duration, 1, 60) &&
+             data.durationMin is int && data.durationMin >= 0 && data.durationMin <= 44640 &&
+             isBoundedString(data.relay, 1, 200) &&
+             isBoundedString(data.remark, 0, 300) &&
+             isValidTimestamp(data.createdAt) &&
+             isValidTimestamp(data.updatedAt);
+    }
+
+    function isValidEnergyEntry(data) {
+      return data.keys().hasAll(['date', 'meter', 'category', 'openReading', 'closeReading', 'mf', 'units', 'createdAt', 'updatedAt']) &&
+             data.keys().hasOnly(['date', 'meter', 'category', 'openReading', 'closeReading', 'mf', 'units', 'createdAt', 'updatedAt']) &&
+             isBoundedString(data.date, 8, 20) &&
+             isBoundedString(data.meter, 1, 140) &&
+             data.category in ['33kV_IN', 'TF_HV', '11kV_LV', '11kV_OUT'] &&
+             isNum(data.openReading) &&
+             isNum(data.closeReading) &&
+             isNum(data.mf) && data.mf > 0 &&
+             isNum(data.units) &&
+             isValidTimestamp(data.createdAt) &&
+             isValidTimestamp(data.updatedAt);
+    }
+
+    function isValidLoadEntry(data) {
+      return data.keys().hasAll(['date', 'timeLabel', 'v33', 'v11', 'tfLoad', 'feederGroup1', 'feederGroup2', 'createdAt', 'updatedAt']) &&
+             data.keys().hasOnly(['date', 'timeLabel', 'v33', 'v11', 'tfLoad', 'feederGroup1', 'feederGroup2', 'createdAt', 'updatedAt']) &&
+             isBoundedString(data.date, 8, 20) &&
+             isBoundedString(data.timeLabel, 1, 60) &&
+             isBoundedString(data.v33, 1, 60) &&
+             isBoundedString(data.v11, 1, 60) &&
+             isBoundedString(data.tfLoad, 1, 120) &&
+             isBoundedString(data.feederGroup1, 1, 120) &&
+             isBoundedString(data.feederGroup2, 1, 120) &&
+             isValidTimestamp(data.createdAt) &&
+             isValidTimestamp(data.updatedAt);
+    }
+
+    function isValidHandoverEntry(data) {
+      return data.keys().hasAll(['date', 'shift', 'relieved', 'relieving', 'runningStatus', 'permits', 'batteryVolt', 'notes', 'createdAt', 'updatedAt']) &&
+             data.keys().hasOnly(['date', 'shift', 'relieved', 'relieving', 'runningStatus', 'permits', 'batteryVolt', 'notes', 'createdAt', 'updatedAt']) &&
+             isBoundedString(data.date, 8, 20) &&
+             isBoundedString(data.shift, 1, 100) &&
+             isBoundedString(data.relieved, 1, 120) &&
+             isBoundedString(data.relieving, 1, 120) &&
+             isBoundedString(data.runningStatus, 1, 350) &&
+             isBoundedString(data.permits, 0, 250) &&
+             isBoundedString(data.batteryVolt, 0, 50) &&
+             isBoundedString(data.notes, 0, 350) &&
+             isValidTimestamp(data.createdAt) &&
+             isValidTimestamp(data.updatedAt);
+    }
+
+    function isValidBatteryEntry(data) {
+      return data.keys().hasAll(['date', 'dcVolt', 'charger', 'cellVolt', 'remark', 'createdAt', 'updatedAt']) &&
+             data.keys().hasOnly(['date', 'dcVolt', 'charger', 'cellVolt', 'remark', 'createdAt', 'updatedAt']) &&
+             isBoundedString(data.date, 8, 20) &&
+             isBoundedString(data.dcVolt, 1, 50) &&
+             isBoundedString(data.charger, 1, 100) &&
+             isBoundedString(data.cellVolt, 1, 120) &&
+             isBoundedString(data.remark, 0, 300) &&
+             isValidTimestamp(data.createdAt) &&
+             isValidTimestamp(data.updatedAt);
+    }
+
+    function isValidIoEntry(data) {
+      return data.keys().hasAll(['date', 'type', 'refNo', 'party', 'subject', 'createdAt', 'updatedAt']) &&
+             data.keys().hasOnly(['date', 'type', 'refNo', 'party', 'subject', 'createdAt', 'updatedAt']) &&
+             isBoundedString(data.date, 8, 20) &&
+             isBoundedString(data.type, 1, 50) &&
+             isBoundedString(data.refNo, 1, 100) &&
+             isBoundedString(data.party, 1, 160) &&
+             isBoundedString(data.subject, 1, 300) &&
+             isValidTimestamp(data.createdAt) &&
+             isValidTimestamp(data.updatedAt);
+    }
+
+    function isValidFaultEntry(data) {
+      return data.keys().hasAll(['date', 'equip', 'bay', 'faultDesc', 'actionTaken', 'status', 'restoredDate', 'oldSn', 'newSn', 'refNo', 'remark', 'createdAt', 'updatedAt']) &&
+             data.keys().hasOnly(['date', 'equip', 'bay', 'faultDesc', 'actionTaken', 'status', 'restoredDate', 'oldSn', 'newSn', 'refNo', 'remark', 'createdAt', 'updatedAt']) &&
+             isBoundedString(data.date, 8, 20) &&
+             isBoundedString(data.equip, 1, 120) &&
+             isBoundedString(data.bay, 0, 120) &&
+             isBoundedString(data.faultDesc, 1, 350) &&
+             isBoundedString(data.actionTaken, 0, 350) &&
+             isBoundedString(data.status, 1, 60) &&
+             isBoundedString(data.restoredDate, 0, 20) &&
+             isBoundedString(data.oldSn, 0, 80) &&
+             isBoundedString(data.newSn, 0, 80) &&
+             isBoundedString(data.refNo, 0, 100) &&
+             isBoundedString(data.remark, 0, 350) &&
+             isValidTimestamp(data.createdAt) &&
+             isValidTimestamp(data.updatedAt);
+    }
+
+    function isValidDailyLossDay(data) {
+      return data.keys().hasAll(['date', 'finalReadings', 'initialOverrides', 'createdAt', 'updatedAt']) &&
+             data.keys().hasOnly(['date', 'finalReadings', 'initialOverrides', 'createdAt', 'updatedAt']) &&
+             isBoundedString(data.date, 8, 20) &&
+             data.finalReadings is map && data.finalReadings.size() <= 20 &&
+             data.initialOverrides is map && data.initialOverrides.size() <= 20 &&
+             isValidTimestamp(data.createdAt) &&
+             isValidTimestamp(data.updatedAt);
+    }
+
+    function isValidMinMaxDay(data) {
+      return data.keys().hasAll(['date', 'entries', 'createdAt', 'updatedAt']) &&
+             data.keys().hasOnly(['date', 'entries', 'createdAt', 'updatedAt']) &&
+             isBoundedString(data.date, 8, 20) &&
+             data.entries is map && data.entries.size() <= 20 &&
+             isValidTimestamp(data.createdAt) &&
+             isValidTimestamp(data.updatedAt);
+    }
+
+    function isValidNameplate(data) {
+      return data.keys().hasAll(['category', 'bay', 'name', 'status', 'make', 'serialNo', 'year', 'specs', 'createdAt', 'updatedAt']) &&
+             data.keys().hasOnly(['category', 'bay', 'name', 'status', 'make', 'serialNo', 'year', 'specs', 'createdAt', 'updatedAt']) &&
+             data.category in ['transformers', 'cts', 'pts', 'vcbs', 'aux'] &&
+             isBoundedString(data.bay, 1, 140) &&
+             isBoundedString(data.name, 1, 180) &&
+             isBoundedString(data.status, 1, 60) &&
+             isBoundedString(data.make, 0, 120) &&
+             isBoundedString(data.serialNo, 0, 100) &&
+             isBoundedString(data.year, 0, 20) &&
+             data.specs is map && data.specs.size() <= 40 &&
+             isValidTimestamp(data.createdAt) &&
+             isValidTimestamp(data.updatedAt);
+    }
+
+    function isValidMonthlyRecord(data) {
+      return data.keys().hasAll(['year', 'monthIdx', 'monthName', 'incomerKwh', 'outgoingKwh', 'diffKwh', 'lossPct', 'drivePdfId', 'feeders', 'createdAt', 'updatedAt']) &&
+             data.keys().hasOnly(['year', 'monthIdx', 'monthName', 'incomerKwh', 'outgoingKwh', 'diffKwh', 'lossPct', 'drivePdfId', 'feeders', 'createdAt', 'updatedAt']) &&
+             data.year is int && data.year >= 2020 && data.year <= 2100 &&
+             data.monthIdx is int && data.monthIdx >= 0 && data.monthIdx <= 11 &&
+             isBoundedString(data.monthName, 1, 20) &&
+             isNum(data.incomerKwh) &&
+             isNum(data.outgoingKwh) &&
+             isNum(data.diffKwh) &&
+             isNum(data.lossPct) &&
+             isBoundedString(data.drivePdfId, 0, 150) &&
+             data.feeders is list && data.feeders.size() <= 16 &&
+             (data.feeders.size() == 0 || data.feeders[0] is map) &&
+             isValidTimestamp(data.createdAt) &&
+             isValidTimestamp(data.updatedAt);
+    }
+
+    function parentSubstationExists(userId, substationId) {
+      return exists(/databases/$(database)/documents/users/$(userId)/substations/$(substationId));
+    }
+
+    // User-scoped substations and all subcollections
+    match /users/{userId}/substations/{substationId} {
+      allow get: if isOwner(userId) && isValidId(substationId);
+      allow list: if isOwner(userId);
+      allow create: if isOwner(userId) && isValidId(substationId) && isValidSubstation(incoming());
+      allow update: if isOwner(userId) && isValidId(substationId) && isValidSubstation(incoming()) &&
+                       incoming().createdAt == existing().createdAt &&
+                       incoming().diff(existing()).affectedKeys().hasOnly(['name', 'code', 'division', 'switches', 'lossMf', 'updatedAt']);
+      allow delete: if isOwner(userId) && isValidId(substationId);
+
+      match /trips/{entryId} {
+        allow get: if isOwner(userId) && isValidId(substationId) && isValidId(entryId);
+        allow list: if isOwner(userId) && isValidId(substationId);
+        allow create: if isOwner(userId) && isValidId(substationId) && isValidId(entryId) &&
+                         isValidTripEntry(incoming()) && parentSubstationExists(userId, substationId);
+        allow update: if isOwner(userId) && isValidId(substationId) && isValidId(entryId) &&
+                         isValidTripEntry(incoming()) && incoming().createdAt == existing().createdAt &&
+                         incoming().diff(existing()).affectedKeys().hasOnly(['date', 'type', 'feeder', 'offTime', 'onTime', 'duration', 'durationMin', 'relay', 'remark', 'updatedAt']);
+        allow delete: if isOwner(userId) && isValidId(substationId) && isValidId(entryId);
+      }
+
+      match /energy/{entryId} {
+        allow get: if isOwner(userId) && isValidId(substationId) && isValidId(entryId);
+        allow list: if isOwner(userId) && isValidId(substationId);
+        allow create: if isOwner(userId) && isValidId(substationId) && isValidId(entryId) &&
+                         isValidEnergyEntry(incoming()) && parentSubstationExists(userId, substationId);
+        allow update: if isOwner(userId) && isValidId(substationId) && isValidId(entryId) &&
+                         isValidEnergyEntry(incoming()) && incoming().createdAt == existing().createdAt &&
+                         incoming().diff(existing()).affectedKeys().hasOnly(['date', 'meter', 'category', 'openReading', 'closeReading', 'mf', 'units', 'updatedAt']);
+        allow delete: if isOwner(userId) && isValidId(substationId) && isValidId(entryId);
+      }
+
+      match /loads/{entryId} {
+        allow get: if isOwner(userId) && isValidId(substationId) && isValidId(entryId);
+        allow list: if isOwner(userId) && isValidId(substationId);
+        allow create: if isOwner(userId) && isValidId(substationId) && isValidId(entryId) &&
+                         isValidLoadEntry(incoming()) && parentSubstationExists(userId, substationId);
+        allow update: if isOwner(userId) && isValidId(substationId) && isValidId(entryId) &&
+                         isValidLoadEntry(incoming()) && incoming().createdAt == existing().createdAt &&
+                         incoming().diff(existing()).affectedKeys().hasOnly(['date', 'timeLabel', 'v33', 'v11', 'tfLoad', 'feederGroup1', 'feederGroup2', 'updatedAt']);
+        allow delete: if isOwner(userId) && isValidId(substationId) && isValidId(entryId);
+      }
+
+      match /handovers/{entryId} {
+        allow get: if isOwner(userId) && isValidId(substationId) && isValidId(entryId);
+        allow list: if isOwner(userId) && isValidId(substationId);
+        allow create: if isOwner(userId) && isValidId(substationId) && isValidId(entryId) &&
+                         isValidHandoverEntry(incoming()) && parentSubstationExists(userId, substationId);
+        allow update: if isOwner(userId) && isValidId(substationId) && isValidId(entryId) &&
+                         isValidHandoverEntry(incoming()) && incoming().createdAt == existing().createdAt &&
+                         incoming().diff(existing()).affectedKeys().hasOnly(['date', 'shift', 'relieved', 'relieving', 'runningStatus', 'permits', 'batteryVolt', 'notes', 'updatedAt']);
+        allow delete: if isOwner(userId) && isValidId(substationId) && isValidId(entryId);
+      }
+
+      match /battery/{entryId} {
+        allow get: if isOwner(userId) && isValidId(substationId) && isValidId(entryId);
+        allow list: if isOwner(userId) && isValidId(substationId);
+        allow create: if isOwner(userId) && isValidId(substationId) && isValidId(entryId) &&
+                         isValidBatteryEntry(incoming()) && parentSubstationExists(userId, substationId);
+        allow update: if isOwner(userId) && isValidId(substationId) && isValidId(entryId) &&
+                         isValidBatteryEntry(incoming()) && incoming().createdAt == existing().createdAt &&
+                         incoming().diff(existing()).affectedKeys().hasOnly(['date', 'dcVolt', 'charger', 'cellVolt', 'remark', 'updatedAt']);
+        allow delete: if isOwner(userId) && isValidId(substationId) && isValidId(entryId);
+      }
+
+      match /io/{entryId} {
+        allow get: if isOwner(userId) && isValidId(substationId) && isValidId(entryId);
+        allow list: if isOwner(userId) && isValidId(substationId);
+        allow create: if isOwner(userId) && isValidId(substationId) && isValidId(entryId) &&
+                         isValidIoEntry(incoming()) && parentSubstationExists(userId, substationId);
+        allow update: if isOwner(userId) && isValidId(substationId) && isValidId(entryId) &&
+                         isValidIoEntry(incoming()) && incoming().createdAt == existing().createdAt &&
+                         incoming().diff(existing()).affectedKeys().hasOnly(['date', 'type', 'refNo', 'party', 'subject', 'updatedAt']);
+        allow delete: if isOwner(userId) && isValidId(substationId) && isValidId(entryId);
+      }
+
+      match /faults/{entryId} {
+        allow get: if isOwner(userId) && isValidId(substationId) && isValidId(entryId);
+        allow list: if isOwner(userId) && isValidId(substationId);
+        allow create: if isOwner(userId) && isValidId(substationId) && isValidId(entryId) &&
+                         isValidFaultEntry(incoming()) && parentSubstationExists(userId, substationId);
+        allow update: if isOwner(userId) && isValidId(substationId) && isValidId(entryId) &&
+                         isValidFaultEntry(incoming()) && incoming().createdAt == existing().createdAt &&
+                         incoming().diff(existing()).affectedKeys().hasOnly(['date', 'equip', 'bay', 'faultDesc', 'actionTaken', 'status', 'restoredDate', 'oldSn', 'newSn', 'refNo', 'remark', 'updatedAt']);
+        allow delete: if isOwner(userId) && isValidId(substationId) && isValidId(entryId);
+      }
+
+      match /dailyLosses/{dateKey} {
+        allow get: if isOwner(userId) && isValidId(substationId) && isValidId(dateKey);
+        allow list: if isOwner(userId) && isValidId(substationId);
+        allow create: if isOwner(userId) && isValidId(substationId) && isValidId(dateKey) &&
+                         isValidDailyLossDay(incoming()) && parentSubstationExists(userId, substationId);
+        allow update: if isOwner(userId) && isValidId(substationId) && isValidId(dateKey) &&
+                         isValidDailyLossDay(incoming()) && incoming().createdAt == existing().createdAt &&
+                         incoming().diff(existing()).affectedKeys().hasOnly(['date', 'finalReadings', 'initialOverrides', 'updatedAt']);
+        allow delete: if isOwner(userId) && isValidId(substationId) && isValidId(dateKey);
+      }
+
+      match /minmax/{dateKey} {
+        allow get: if isOwner(userId) && isValidId(substationId) && isValidId(dateKey);
+        allow list: if isOwner(userId) && isValidId(substationId);
+        allow create: if isOwner(userId) && isValidId(substationId) && isValidId(dateKey) &&
+                         isValidMinMaxDay(incoming()) && parentSubstationExists(userId, substationId);
+        allow update: if isOwner(userId) && isValidId(substationId) && isValidId(dateKey) &&
+                         isValidMinMaxDay(incoming()) && incoming().createdAt == existing().createdAt &&
+                         incoming().diff(existing()).affectedKeys().hasOnly(['date', 'entries', 'updatedAt']);
+        allow delete: if isOwner(userId) && isValidId(substationId) && isValidId(dateKey);
+      }
+
+      match /nameplates/{itemId} {
+        allow get: if isOwner(userId) && isValidId(substationId) && isValidId(itemId);
+        allow list: if isOwner(userId) && isValidId(substationId);
+        allow create: if isOwner(userId) && isValidId(substationId) && isValidId(itemId) &&
+                         isValidNameplate(incoming()) && parentSubstationExists(userId, substationId);
+        allow update: if isOwner(userId) && isValidId(substationId) && isValidId(itemId) &&
+                         isValidNameplate(incoming()) && incoming().createdAt == existing().createdAt &&
+                         incoming().diff(existing()).affectedKeys().hasOnly(['category', 'bay', 'name', 'status', 'make', 'serialNo', 'year', 'specs', 'updatedAt']);
+        allow delete: if isOwner(userId) && isValidId(substationId) && isValidId(itemId);
+      }
+
+      match /monthlyRecords/{monthKey} {
+        allow get: if isOwner(userId) && isValidId(substationId) && isValidId(monthKey);
+        allow list: if isOwner(userId) && isValidId(substationId);
+        allow create: if isOwner(userId) && isValidId(substationId) && isValidId(monthKey) &&
+                         isValidMonthlyRecord(incoming()) && parentSubstationExists(userId, substationId);
+        allow update: if isOwner(userId) && isValidId(substationId) && isValidId(monthKey) &&
+                         isValidMonthlyRecord(incoming()) && incoming().createdAt == existing().createdAt &&
+                         incoming().diff(existing()).affectedKeys().hasOnly(['year', 'monthIdx', 'monthName', 'incomerKwh', 'outgoingKwh', 'diffKwh', 'lossPct', 'drivePdfId', 'feeders', 'updatedAt']);
+        allow delete: if isOwner(userId) && isValidId(substationId) && isValidId(monthKey);
+      }
+    }
+  }
+}

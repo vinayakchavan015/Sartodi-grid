@@ -1,0 +1,253 @@
+{
+  "entities": {
+    "Substation": {
+      "title": "Substation",
+      "description": "Core metadata, SLD switch states, and custom MF overrides for a 33/11 kV substation.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Substation display name" },
+        "code": { "type": "string", "description": "MSEDCL substation code (e.g. 284619)" },
+        "division": { "type": "string", "description": "Branch, subdivision, and division" },
+        "switches": { "type": "object", "description": "Map of SLD switch keys to boolean ON/OFF states" },
+        "lossMf": { "type": "object", "description": "Map of daily loss meter IDs to custom multiplying factors" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp set via FieldValue.serverTimestamp()" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp set via FieldValue.serverTimestamp()" }
+      },
+      "required": ["name", "code", "division", "switches", "lossMf", "createdAt", "updatedAt"]
+    },
+    "TripEntry": {
+      "title": "TripEntry",
+      "description": "Daily tripping, hand-trip, shutdown, breakdown, or load shedding register entry.",
+      "type": "object",
+      "properties": {
+        "date": { "type": "string", "description": "ISO date YYYY-MM-DD" },
+        "type": { "type": "string", "description": "TP / HT / SD / BD / LS / PL label" },
+        "feeder": { "type": "string", "description": "Feeder or bay name" },
+        "offTime": { "type": "string", "description": "Off time HH:mm" },
+        "onTime": { "type": "string", "description": "On time HH:mm" },
+        "duration": { "type": "string", "description": "Formatted duration string" },
+        "durationMin": { "type": "integer", "description": "Duration in minutes" },
+        "relay": { "type": "string", "description": "Relay indication or cause" },
+        "remark": { "type": "string", "description": "Optional permit or operator remark" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp" }
+      },
+      "required": ["date", "type", "feeder", "offTime", "onTime", "duration", "durationMin", "relay", "remark", "createdAt", "updatedAt"]
+    },
+    "EnergyEntry": {
+      "title": "EnergyEntry",
+      "description": "Meter reading and auto-calculated kWh units entry.",
+      "type": "object",
+      "properties": {
+        "date": { "type": "string", "description": "ISO date YYYY-MM-DD" },
+        "meter": { "type": "string", "description": "Meter name and serial" },
+        "category": { "type": "string", "enum": ["33kV_IN", "TF_HV", "11kV_LV", "11kV_OUT"], "description": "Meter category" },
+        "openReading": { "type": "number", "description": "Opening reading" },
+        "closeReading": { "type": "number", "description": "Closing reading" },
+        "mf": { "type": "number", "description": "Multiplying factor" },
+        "units": { "type": "number", "description": "Calculated kWh units" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp" }
+      },
+      "required": ["date", "meter", "category", "openReading", "closeReading", "mf", "units", "createdAt", "updatedAt"]
+    },
+    "LoadEntry": {
+      "title": "LoadEntry",
+      "description": "Voltage and feeder load Min/Max log entry.",
+      "type": "object",
+      "properties": {
+        "date": { "type": "string" },
+        "timeLabel": { "type": "string" },
+        "v33": { "type": "string" },
+        "v11": { "type": "string" },
+        "tfLoad": { "type": "string" },
+        "feederGroup1": { "type": "string" },
+        "feederGroup2": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["date", "timeLabel", "v33", "v11", "tfLoad", "feederGroup1", "feederGroup2", "createdAt", "updatedAt"]
+    },
+    "HandoverEntry": {
+      "title": "HandoverEntry",
+      "description": "Shift charge handover register record.",
+      "type": "object",
+      "properties": {
+        "date": { "type": "string" },
+        "shift": { "type": "string" },
+        "relieved": { "type": "string" },
+        "relieving": { "type": "string" },
+        "runningStatus": { "type": "string" },
+        "permits": { "type": "string" },
+        "batteryVolt": { "type": "string" },
+        "notes": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["date", "shift", "relieved", "relieving", "runningStatus", "permits", "batteryVolt", "notes", "createdAt", "updatedAt"]
+    },
+    "BatteryEntry": {
+      "title": "BatteryEntry",
+      "description": "110V DC battery bank inspection entry.",
+      "type": "object",
+      "properties": {
+        "date": { "type": "string" },
+        "dcVolt": { "type": "string" },
+        "charger": { "type": "string" },
+        "cellVolt": { "type": "string" },
+        "remark": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["date", "dcVolt", "charger", "cellVolt", "remark", "createdAt", "updatedAt"]
+    },
+    "IoEntry": {
+      "title": "IoEntry",
+      "description": "Inward/Outward correspondence register entry.",
+      "type": "object",
+      "properties": {
+        "date": { "type": "string" },
+        "type": { "type": "string" },
+        "refNo": { "type": "string" },
+        "party": { "type": "string" },
+        "subject": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["date", "type", "refNo", "party", "subject", "createdAt", "updatedAt"]
+    },
+    "FaultEntry": {
+      "title": "FaultEntry",
+      "description": "Equipment fault and repair lifecycle entry.",
+      "type": "object",
+      "properties": {
+        "date": { "type": "string" },
+        "equip": { "type": "string" },
+        "bay": { "type": "string" },
+        "faultDesc": { "type": "string" },
+        "actionTaken": { "type": "string" },
+        "status": { "type": "string" },
+        "restoredDate": { "type": "string" },
+        "oldSn": { "type": "string" },
+        "newSn": { "type": "string" },
+        "refNo": { "type": "string" },
+        "remark": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["date", "equip", "bay", "faultDesc", "actionTaken", "status", "restoredDate", "oldSn", "newSn", "refNo", "remark", "createdAt", "updatedAt"]
+    },
+    "DailyLossDay": {
+      "title": "DailyLossDay",
+      "description": "Daily meter final readings and optional initial overrides for a single date (YYYY-MM-DD).",
+      "type": "object",
+      "properties": {
+        "date": { "type": "string" },
+        "finalReadings": { "type": "object" },
+        "initialOverrides": { "type": "object" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["date", "finalReadings", "initialOverrides", "createdAt", "updatedAt"]
+    },
+    "MinMaxDay": {
+      "title": "MinMaxDay",
+      "description": "Daily Min-Max Amp/kV readings with timestamps for a single date (YYYY-MM-DD).",
+      "type": "object",
+      "properties": {
+        "date": { "type": "string" },
+        "entries": { "type": "object" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["date", "entries", "createdAt", "updatedAt"]
+    },
+    "NameplateItem": {
+      "title": "NameplateItem",
+      "description": "Equipment nameplate (Transformer, CT R-Y-B, PT R-Y-B, VCB, or SECURE Meter/Aux).",
+      "type": "object",
+      "properties": {
+        "category": { "type": "string", "enum": ["transformers", "cts", "pts", "vcbs", "aux"] },
+        "bay": { "type": "string" },
+        "name": { "type": "string" },
+        "status": { "type": "string" },
+        "make": { "type": "string" },
+        "serialNo": { "type": "string" },
+        "year": { "type": "string" },
+        "specs": { "type": "object" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["category", "bay", "name", "status", "make", "serialNo", "year", "specs", "createdAt", "updatedAt"]
+    },
+    "MonthlyRecord": {
+      "title": "MonthlyRecord",
+      "description": "Custom or updated monthly substation loss & feeder analytics summary for YYYY-MM.",
+      "type": "object",
+      "properties": {
+        "year": { "type": "integer" },
+        "monthIdx": { "type": "integer" },
+        "monthName": { "type": "string" },
+        "incomerKwh": { "type": "number" },
+        "outgoingKwh": { "type": "number" },
+        "diffKwh": { "type": "number" },
+        "lossPct": { "type": "number" },
+        "drivePdfId": { "type": "string" },
+        "feeders": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["year", "monthIdx", "monthName", "incomerKwh", "outgoingKwh", "diffKwh", "lossPct", "drivePdfId", "feeders", "createdAt", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}/substations/{substationId}": {
+      "schema": { "$ref": "#/entities/Substation" },
+      "description": "User-owned substation configurations and live SLD switch states."
+    },
+    "/users/{userId}/substations/{substationId}/trips/{entryId}": {
+      "schema": { "$ref": "#/entities/TripEntry" },
+      "description": "Daily tripping, shutdown, breakdown, and load shedding entries."
+    },
+    "/users/{userId}/substations/{substationId}/energy/{entryId}": {
+      "schema": { "$ref": "#/entities/EnergyEntry" },
+      "description": "Daily/monthly energy meter readings and unit calculations."
+    },
+    "/users/{userId}/substations/{substationId}/loads/{entryId}": {
+      "schema": { "$ref": "#/entities/LoadEntry" },
+      "description": "Voltage and feeder load Min/Max logs."
+    },
+    "/users/{userId}/substations/{substationId}/handovers/{entryId}": {
+      "schema": { "$ref": "#/entities/HandoverEntry" },
+      "description": "Shift charge handover logs."
+    },
+    "/users/{userId}/substations/{substationId}/battery/{entryId}": {
+      "schema": { "$ref": "#/entities/BatteryEntry" },
+      "description": "110V DC battery bank inspection logs."
+    },
+    "/users/{userId}/substations/{substationId}/io/{entryId}": {
+      "schema": { "$ref": "#/entities/IoEntry" },
+      "description": "Inward and outward correspondence logs."
+    },
+    "/users/{userId}/substations/{substationId}/faults/{entryId}": {
+      "schema": { "$ref": "#/entities/FaultEntry" },
+      "description": "Equipment fault and repair tracking logs."
+    },
+    "/users/{userId}/substations/{substationId}/dailyLosses/{dateKey}": {
+      "schema": { "$ref": "#/entities/DailyLossDay" },
+      "description": "Daily substation loss meter readings keyed by YYYY-MM-DD."
+    },
+    "/users/{userId}/substations/{substationId}/minmax/{dateKey}": {
+      "schema": { "$ref": "#/entities/MinMaxDay" },
+      "description": "Daily Min-Max Amp/kV readings keyed by YYYY-MM-DD."
+    },
+    "/users/{userId}/substations/{substationId}/nameplates/{itemId}": {
+      "schema": { "$ref": "#/entities/NameplateItem" },
+      "description": "Custom or edited equipment nameplates (Transformer, CT/PT R-Y-B, VCB, SECURE Meters)."
+    },
+    "/users/{userId}/substations/{substationId}/monthlyRecords/{monthKey}": {
+      "schema": { "$ref": "#/entities/MonthlyRecord" },
+      "description": "Monthly loss and feeder performance summary overrides keyed by YYYY-MM."
+    }
+  }
+}
